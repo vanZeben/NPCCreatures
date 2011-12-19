@@ -396,4 +396,16 @@ public class NPCManager {
 		return npcNetworkManager;
 	}
 	
+	public NPC getNPC(org.bukkit.entity.Entity entity)
+	{
+		for(NPC npc : this.getNPCs())
+		{
+			if(npc.getBukkitEntity() == entity)
+			{
+				return npc;
+			}
+		}
+		return null;
+	}
+	
 }

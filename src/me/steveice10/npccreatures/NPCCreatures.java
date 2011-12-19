@@ -21,7 +21,7 @@ import com.topcat.npclib.entity.NPC;
 
 public class NPCCreatures extends JavaPlugin {
 
-	public NPCManager npcManager;
+	protected NPCManager npcManager;
 	public FileConfiguration config;
 	public boolean isSpoutEnabled = false;
 	public NPCCreaturesServerListener serverListener = new NPCCreaturesServerListener(this);
@@ -108,5 +108,9 @@ public class NPCCreatures extends JavaPlugin {
 		}
 		return true;
 	}
-	
+    
+    public NPCManager getNPCManager()
+    {
+    	return this.npcManager;
+    }
 }
