@@ -9,4 +9,14 @@ public class SlimeNPC extends NPC {
 		super(entity, name);
 	}
 	
+	public void setSize(int size)
+	{
+		((NPCSlime)this.entity).setSize(size);
+	}
+	
+	public int getSize()
+	{
+		return ((NPCSlime)this.entity).getSize();
+	}
+	
 }

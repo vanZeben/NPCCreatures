@@ -49,16 +49,6 @@ public class NPCWolf extends EntityWolf {
     protected Entity findTarget() {
         return null;
     }
-	
-	@Override
-    public void setSitting(boolean flag) {
-		return;
-    }
-	
-	@Override
-    public void setAngry(boolean flag) {
-		return;
-    }
 
 	@Override
     public void setTamed(boolean flag) {

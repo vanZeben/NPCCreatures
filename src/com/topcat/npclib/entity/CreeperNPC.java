@@ -9,4 +9,9 @@ public class CreeperNPC extends NPC {
 		super(entity, name);
 	}
 	
+	public void setPowered(boolean powered)
+	{
+		((NPCCreeper)this.entity).setPowered(true);
+	}
+	
 }

@@ -6,18 +6,16 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import net.minecraft.server.DamageSource;
-import net.minecraft.server.Entity;
 import net.minecraft.server.EntityHuman;
-import net.minecraft.server.EntityZombie;
+import net.minecraft.server.EntitySlime;
 import net.minecraft.server.Packet34EntityTeleport;
 import net.minecraft.server.World;
 
-public class NPCSlime extends EntityZombie {
+public class NPCSlime extends EntitySlime {
 
 	public NPCSlime(World world)
 	{
 		super(world);
-		this.damage = 0;
 	}
 	
 	public void setBukkitEntity(org.bukkit.entity.Entity entity)
@@ -40,20 +38,9 @@ public class NPCSlime extends EntityZombie {
 		return;
 	}
 	
-	@Override
-    protected Entity findTarget() {
-		return null;
-    }
-	
 	//PathFinding
 	@Override
     protected void m_() {
-    	return;
-    }
-	
-	//Stroll
-	@Override
-    public void C() {
     	return;
     }
 	

@@ -139,68 +139,6 @@ public class NPCManager {
 		}
 	}
 	
-	/* public NPC spawnVillagerNPC(String name, Location l) {
-		int i = 0;
-		String id = name;
-		while (npcs.containsKey(id)) {
-			id = name + i;
-			i++;
-		}
-		return spawnVillagerNPC(name, l, id);
-	}
-	
-	public NPC spawnVillagerNPC(String name, Location l, String id) {
-		if (npcs.containsKey(id)) {
-			server.getLogger().log(Level.WARNING, "NPC with that id already exists, existing NPC returned");
-			return npcs.get(id);
-		} else {
-			if (name.length() > 16) { // Check and nag if name is too long, spawn NPC anyway with shortened name.
-				String tmp = name.substring(0, 16);
-				server.getLogger().log(Level.WARNING, "NPCs can't have names longer than 16 characters,");
-				server.getLogger().log(Level.WARNING, name + " has been shortened to " + tmp);
-				name = tmp;
-			}
-			BWorld world = getBWorld(l.getWorld());
-			NPCVillager npcEntity = new NPCVillager(world, name);
-			npcEntity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
-			world.getWorldServer().addEntity(npcEntity); //the right way
-			NPC npc = new VillagerNPC(npcEntity);
-			npcs.put(id, npc);
-			return npc;
-		}
-	}
-	
-	public NPC spawnHumanNPC(String name, Location l) {
-		int i = 0;
-		String id = name;
-		while (npcs.containsKey(id)) {
-			id = name + i;
-			i++;
-		}
-		return spawnHumanNPC(name, l, id);
-	}
-	
-	public NPC spawnHumanNPC(String name, Location l, String id) {
-		if (npcs.containsKey(id)) {
-			server.getLogger().log(Level.WARNING, "NPC with that id already exists, existing NPC returned");
-			return npcs.get(id);
-		} else {
-			if (name.length() > 16) { // Check and nag if name is too long, spawn NPC anyway with shortened name.
-				String tmp = name.substring(0, 16);
-				server.getLogger().log(Level.WARNING, "NPCs can't have names longer than 16 characters,");
-				server.getLogger().log(Level.WARNING, name + " has been shortened to " + tmp);
-				name = tmp;
-			}
-			BWorld world = getBWorld(l.getWorld());
-			NPCEntity npcEntity = new NPCEntity(this, world, ChatColor.GREEN+name, new ItemInWorldManager(world.getWorldServer()));
-			npcEntity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
-			world.getWorldServer().addEntity(npcEntity); //the right way
-			NPC npc = new HumanNPC(npcEntity);
-			npcs.put(id, npc);
-			return npc;
-		}
-	} */
-	
 	public NPC spawnNPC(String name, Location l, NPCType type) {
 		int i = 0;
 		String id = name + i;
@@ -226,15 +164,15 @@ public class NPCManager {
             Entity entity = this.createNPCEntity(type, world.getWorldServer(), ChatColor.GREEN + name);
 			entity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
 			world.getWorldServer().addEntity(entity); //the right way
-			if(((NPCCreatures)plugin).isSpoutEnabled) Spout.getServer().setTitle((LivingEntity)entity.getBukkitEntity(), name);
-			NPC npc = this.getNPC(entity, name);
+			if(((NPCCreatures)plugin).isSpoutEnabled) Spout.getServer().setTitle((LivingEntity)entity.getBukkitEntity(), ChatColor.GREEN + name);
+			NPC npc = this.getNewNPC(entity, ChatColor.GREEN + name);
 			npc.setNPCId(id);
 			npcs.put(id, npc);
 			return npc;
 		}
 	}
 	
-	private NPC getNPC(Entity entity, String name)
+	private NPC getNewNPC(Entity entity, String name)
 	{
 		if(entity instanceof NPCHuman) return new HumanNPC((NPCHuman)entity, name);
 		if(entity instanceof NPCVillager) return new VillagerNPC((NPCVillager)entity, name);
@@ -396,15 +334,10 @@ public class NPCManager {
 		return npcNetworkManager;
 	}
 	
+	@Deprecated
 	public NPC getNPC(org.bukkit.entity.Entity entity)
 	{
-		for(NPC npc : this.getNPCs())
-		{
-			if(npc.getBukkitEntity() == entity)
-			{
-				return npc;
-			}
-		}
+		if(entity instanceof NPC) return (NPC)entity;
 		return null;
 	}
 	

@@ -9,4 +9,14 @@ public class MagmaCubeNPC extends NPC {
 		super(entity, name);
 	}
 	
+	public void setSize(int size)
+	{
+		((NPCMagmaCube)this.entity).setSize(size);
+	}
+	
+	public int getSize()
+	{
+		return ((NPCMagmaCube)this.entity).getSize();
+	}
+	
 }

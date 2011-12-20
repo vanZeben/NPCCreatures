@@ -5,17 +5,29 @@ import com.topcat.npclib.pathing.NPCPath;
 import com.topcat.npclib.pathing.NPCPathFinder;
 import com.topcat.npclib.pathing.Node;
 import com.topcat.npclib.pathing.PathReturn;
+
+import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.entity.Player;
+import org.getspout.spout.player.SpoutCraftPlayer;
+import org.getspout.spoutapi.Spout;
+import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.packet.PacketEntityTitle;
 
+import me.steveice10.npccreatures.NPCCreatures;
 import net.minecraft.server.Entity;
+import net.minecraft.server.EntityLiving;
 
-public class NPC {
+public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 	
-	private Entity entity;
+	protected Entity entity;
 	private NPCPathFinder path;
 	private Iterator<Node> pathIterator;
 	private Node last;
@@ -24,10 +36,22 @@ public class NPC {
 	private Runnable onFail;
 	private String name;
 	private String npcId;
+	public int lastNameTime = 0;
+	private NPCCreatures plugin;
 	
-	public NPC(Entity entity, String name) {
+	public NPC(EntityLiving entity, String name) {
+		super((CraftServer)Bukkit.getServer(), entity);
 		this.entity = entity;
 		this.name = name;
+		this.plugin = ((NPCCreatures)((CraftServer)Bukkit.getServer()).getPluginManager().getPlugin("NPCCreatures"));
+		try {
+			Field field = Entity.class.getDeclaredField("bukkitEntity");
+			field.setAccessible(true);
+			field.set(this.entity, this);
+		} catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	public Entity getEntity() {
@@ -133,6 +157,68 @@ public class NPC {
 			getEntity().setPositionRotation(runningPath.getEnd().getX(), runningPath.getEnd().getY(), runningPath.getEnd().getZ(), runningPath.getEnd().getYaw(), runningPath.getEnd().getPitch());
 			Bukkit.getServer().getScheduler().cancelTask(taskid);
 			taskid = 0;
+		}
+	}
+	
+	public void say(String message)
+	{
+		if(plugin.isSpoutEnabled) {
+			Spout.getServer().setTitle(this, ChatColor.YELLOW+message+"\n"+Spout.getServer().getTitle(this));
+			this.lastNameTime = 5;
+			if(!plugin.titleQueue.contains(this))
+			{
+				plugin.titleQueue.add(this);
+			}
+		}
+		Bukkit.getServer().broadcastMessage(this.getName()+": "+message);
+	}
+	
+	public void say(String message, Player player)
+	{
+		if(plugin.isSpoutEnabled) {
+			((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+this.getName()));
+			this.lastNameTime = 5;
+			if(!plugin.titleQueue.contains(this))
+			{
+				plugin.titleQueue.add(this);
+			}
+		}
+		player.sendMessage(this.getName()+": "+message);
+	}
+	
+	public void say(String message, List<Player> players)
+	{
+		for(Player player : players)
+		{
+			if(plugin.isSpoutEnabled) {
+				((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+Spout.getServer().getTitle(this)));
+				this.lastNameTime = 5;
+				if(!plugin.titleQueue.contains(this))
+				{
+					plugin.titleQueue.add(this);
+				}
+			}
+			player.sendMessage(this.getName()+": "+message);
+		}
+	}
+	
+	public void say(String message, int distance)
+	{
+		Player players[] = Bukkit.getServer().getOnlinePlayers();
+		for(Player player : players)
+		{
+			if(player.getLocation().distanceSquared(this.getLocation()) <= distance)
+			{
+				if(plugin.isSpoutEnabled) {
+					((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+Spout.getServer().getTitle(this)));
+					this.lastNameTime = 5;
+					if(!plugin.titleQueue.contains(this))
+					{
+						plugin.titleQueue.add(this);
+					}
+				}
+				player.sendMessage(this.getName()+": "+message);
+			}
 		}
 	}
 	
