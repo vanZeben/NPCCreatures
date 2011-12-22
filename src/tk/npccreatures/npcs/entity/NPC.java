@@ -10,6 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.getspout.spout.player.SpoutCraftPlayer;
 import org.getspout.spoutapi.Spout;
@@ -17,6 +19,7 @@ import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.packet.PacketEntityTitle;
 
 import tk.npccreatures.NPCCreatures;
+import tk.npccreatures.ResourceRunnable;
 import tk.npccreatures.npcs.NPCManager;
 import tk.npccreatures.npcs.pathing.NPCPath;
 import tk.npccreatures.npcs.pathing.NPCPathFinder;
@@ -25,6 +28,7 @@ import tk.npccreatures.npcs.pathing.PathReturn;
 
 import net.minecraft.server.Entity;
 import net.minecraft.server.EntityLiving;
+import net.minecraft.server.Packet22Collect;
 
 /**
  * Represents an NPC.
@@ -41,7 +45,9 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 	private String name;
 	private String npcId;
 	public int lastNameTime = 0;
-	private NPCCreatures plugin;
+	protected NPCCreatures plugin;
+	private int itemPickupDistance = 2;
+	private boolean pickupMode = false;
 	
 	public NPC(EntityLiving entity, String name) {
 		super((CraftServer)Bukkit.getServer(), entity);
@@ -56,6 +62,20 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 		{
 			ex.printStackTrace();
 		}
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new ResourceRunnable(this) {
+
+			@Override
+			public void run() {
+				NPC npc = (NPC)this.params[0];
+				for(org.bukkit.entity.Entity e : npc.entity.world.getWorld().getEntities())
+				{
+					if(e instanceof Item)
+					{
+						if(npc.getPickupMode() == true && npc.getLocation().distanceSquared(e.getLocation()) < npc.getItemPickupDistance()) npc.pickupItem((Item)e);
+					}
+				}
+			} 
+		}, 10, 10);
 	}
 	
 	/**
@@ -220,7 +240,7 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 	public void say(String message)
 	{
 		if(plugin.isSpoutEnabled) {
-			Spout.getServer().setTitle(this, ChatColor.YELLOW+message+"\n"+Spout.getServer().getTitle(this));
+			Spout.getServer().setTitle(this, ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName());
 			this.lastNameTime = 5;
 			if(!plugin.titleQueue.contains(this))
 			{
@@ -238,7 +258,7 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 	public void say(String message, Player player)
 	{
 		if(plugin.isSpoutEnabled) {
-			((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+this.getName()));
+			((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
 			this.lastNameTime = 5;
 			if(!plugin.titleQueue.contains(this))
 			{
@@ -258,7 +278,7 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 		for(Player player : players)
 		{
 			if(plugin.isSpoutEnabled) {
-				((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+Spout.getServer().getTitle(this)));
+				((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
 				this.lastNameTime = 5;
 				if(!plugin.titleQueue.contains(this))
 				{
@@ -282,7 +302,7 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 			if(player.getLocation().distanceSquared(this.getLocation()) <= distance)
 			{
 				if(plugin.isSpoutEnabled) {
-					((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+Spout.getServer().getTitle(this)));
+					((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
 					this.lastNameTime = 5;
 					if(!plugin.titleQueue.contains(this))
 					{
@@ -292,6 +312,47 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 				player.sendMessage(this.getName()+": "+message);
 			}
 		}
+	}
+	
+	/**
+	 * Makes the NPC pickup an item.
+	 * @param Item to pickup.
+	 */
+	public void pickupItem(Item item) {
+        ((CraftServer)this.plugin.getServer()).getServer().getTracker(((CraftWorld)this.getWorld()).getHandle().dimension).a(entity, new Packet22Collect(item.getEntityId(), this.getEntityId()));
+        item.remove();
+	}
+	
+	/**
+	 * Sets whether the NPC picks up items or not.
+	 * @param Mode to set.
+	 */
+	public void setPickupMode(boolean mode) {
+		this.pickupMode = true;
+	}
+	
+	/**
+	 * Gets whether the NPC picks up items or not.
+	 * @return Current pickup mode.
+	 */
+	public boolean getPickupMode() {
+		return this.pickupMode;
+	}
+	
+	/**
+	 * Sets the distance to pickup items over.
+	 * @param Distance to pickup items.
+	 */
+	public void setItemPickupDistance(int distance) {
+		this.itemPickupDistance = distance;
+	}
+	
+	/**
+	 * Gets the distance to pickup items over.
+	 * @return Distance to pickup items.
+	 */
+	public int getItemPickupDistance() {
+		return this.itemPickupDistance;
 	}
 	
 }

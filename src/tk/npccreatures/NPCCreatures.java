@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -22,9 +23,6 @@ import org.getspout.spoutapi.Spout;
 import tk.npccreatures.npcs.NPCManager;
 import tk.npccreatures.npcs.NPCType;
 import tk.npccreatures.npcs.entity.NPC;
-import tk.npccreatures.npcs.entity.SlimeNPC;
-import tk.npccreatures.npcs.entity.VillagerNPC;
-import tk.npccreatures.npcs.entity.VillagerNPC.SkinType;
 
 
 public class NPCCreatures extends JavaPlugin {
@@ -34,13 +32,14 @@ public class NPCCreatures extends JavaPlugin {
 	public boolean isSpoutEnabled = false;
 	public NPCCreaturesServerListener serverListener = new NPCCreaturesServerListener(this);
 	public List<NPC> titleQueue;
+	public boolean pickupsEnabled = false;
 	
 	@Override
 	public void onDisable() {
 		try {
-			File npcCreatures = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "npcs.yml");
-			npcCreatures.mkdir();
-			config.save(npcCreatures);
+			File npcCreaturesSave = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "config.yml");
+			if(!npcCreaturesSave.exists()) npcCreaturesSave.mkdir();
+			config.save(npcCreaturesSave);
 			npcManager.despawnAll();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -57,10 +56,47 @@ public class NPCCreatures extends JavaPlugin {
 		{
 			this.isSpoutEnabled = true;
 		}
-		File npcCreatures = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "npcs.yml");
-		npcCreatures.mkdir();
+		File npcCreaturesSave = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "config.yml");
+		if(!npcCreaturesSave.exists()) {
+			try {
+				config.save(npcCreaturesSave);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		try {
-			config.load(npcCreatures);
+			config.load(npcCreaturesSave);
+			if(!config.contains("pickup")) {
+				// Compatibility code for old configuration format
+				if(!config.isConfigurationSection("npcs")) {
+					ConfigurationSection np = config.createSection("npcs");
+					Map<String, Object> npcs = config.getValues(false);
+					Object o;
+					ConfigurationSection b;
+					MemorySection d;
+					Map<String, Object> vals;
+					for(String id : npcs.keySet())
+					{
+						if(id.equals("npcs")) continue;
+						o = npcs.get(id);
+						if(o instanceof MemorySection)
+						{
+							b = np.createSection(id);
+							d = (MemorySection) o;
+							vals = d.getValues(false);
+							for(String id2 : vals.keySet())
+							{
+								b.set(id2, d.get(id2));
+							}
+							config.set(id, null);
+						}
+					}
+				}
+
+				config.set("pickup", false);
+				config.save(npcCreaturesSave);
+			}
+			if(config.getBoolean("pickup")) this.pickupsEnabled = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -100,7 +136,8 @@ public class NPCCreatures extends JavaPlugin {
 	
 	public void loadNPCs()
 	{
-		Map<String, Object> npcs = config.getValues(false);
+		if(!config.isConfigurationSection("npcs")) config.createSection("npcs");
+		Map<String, Object> npcs = config.getConfigurationSection("npcs").getValues(false);
 		Object o;
 		MemorySection data;
 		for(String id : npcs.keySet())
@@ -109,7 +146,12 @@ public class NPCCreatures extends JavaPlugin {
 			if(o instanceof MemorySection)
 			{
 				data = (MemorySection) o;
-				npcManager.spawnNPC(data.getString("name"), new Location(this.getServer().getWorld(data.getString("world")), data.getInt("x"), data.getInt("y"), data.getInt("z"), (float) data.getDouble("yaw"), (float) data.getDouble("pitch")), NPCType.valueOf(data.getString("type")), id);
+				try {
+					npcManager.spawnNPC(data.getString("name"), new Location(this.getServer().getWorld(data.getString("world")), data.getInt("x"), data.getInt("y"), data.getInt("z"), (float) data.getDouble("yaw"), (float) data.getDouble("pitch")), NPCType.valueOf(data.getString("type")), id);
+				} catch(Exception ex) {
+					System.err.println("Error spawning an NPC - invalid config - skipping:");
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
@@ -127,15 +169,21 @@ public class NPCCreatures extends JavaPlugin {
 				}
 				String name = args[0];
 				NPCType type = NPCType.HUMAN;
-				if(args.length > 1) type = NPCType.valueOf(args[1].toUpperCase());
+				if(args.length > 1) {
+					try {
+						type = NPCType.valueOf(args[1].toUpperCase());
+					} catch(Exception e)
+					{
+						sender.sendMessage(ChatColor.RED+"Invalid NPC type. Valid types are: zombie, creeper, spider, skeleton, enderman, blaze, magmacube, silverfish, pigzombie, slime, cavespider, villager, human, mooshroom, cow, pig, sheep, chicken, wolf, squid, snowman.");
+						return true;
+					}
+				}
 				if(type == null)
 				{
 					sender.sendMessage(ChatColor.RED+"Invalid NPC type. Valid types are: zombie, creeper, spider, skeleton, enderman, blaze, magmacube, silverfish, pigzombie, slime, cavespider, villager, human, mooshroom, cow, pig, sheep, chicken, wolf, squid, snowman.");
 					return true;
 				}
 				NPC npc = this.npcManager.spawnNPC(name, ((Player)sender).getLocation(), type);
-				if(npc instanceof VillagerNPC) ((VillagerNPC)npc).setSkin(SkinType.FARMER);
-				if(npc instanceof SlimeNPC) ((SlimeNPC)npc).setSize(10);
 				Hashtable<String, Object> data = new Hashtable<String, Object>();
 				data.put("name", npc.getName());
 				data.put("type", type.toString());
@@ -145,7 +193,7 @@ public class NPCCreatures extends JavaPlugin {
 				data.put("yaw", ((Player)sender).getLocation().getYaw());
 				data.put("pitch", ((Player)sender).getLocation().getPitch());
 				data.put("world", ((Player)sender).getLocation().getWorld().getName());
-				this.config.createSection(npc.getNPCId(), data);
+				this.config.getConfigurationSection("npcs").createSection(npc.getNPCId(), data);
 				sender.sendMessage(ChatColor.GREEN+"Successfully created an npc with type "+type.toString()+"!");
 				return true;
 			}
@@ -157,7 +205,7 @@ public class NPCCreatures extends JavaPlugin {
 					return true;
 				}
 				this.npcManager.despawnById(args[0]);
-				this.config.set(args[0], null);
+				this.config.getConfigurationSection("npcs").set(args[0], null);
 				sender.sendMessage(ChatColor.GREEN+"NPC successfully deleted!");
 			}
 		}

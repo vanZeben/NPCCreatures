@@ -183,7 +183,8 @@ public class NPCManager {
 			entity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
 			world.getWorldServer().addEntity(entity); //the right way
 			if(((NPCCreatures)plugin).isSpoutEnabled) Spout.getServer().setTitle((LivingEntity)entity.getBukkitEntity(), ChatColor.GREEN + name);
-			NPC npc = this.getNewNPC(entity, ChatColor.GREEN + name);
+			NPC npc = this.getNewNPC(entity, name);
+			if(((NPCCreatures)plugin).pickupsEnabled) npc.setPickupMode(true);
 			npc.setNPCId(id);
 			npcs.put(id, npc);
 			return npc;

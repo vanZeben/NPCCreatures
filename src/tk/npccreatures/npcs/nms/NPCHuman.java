@@ -7,7 +7,9 @@ import net.minecraft.server.ItemInWorldManager;
 import net.minecraft.server.World;
 import net.minecraft.server.WorldServer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.event.entity.EntityTargetEvent;
 
 import tk.npccreatures.npcs.NPCManager;
@@ -44,6 +46,11 @@ public class NPCHuman extends EntityPlayer {
 		server.getPluginManager().callEvent(event);
 		
 		return super.b(entity);
+	}
+	
+	@Override
+	public CraftPlayer getPlayer() {
+		return new CraftPlayer((CraftServer)Bukkit.getServer(), this);
 	}
 	
 	@Override
