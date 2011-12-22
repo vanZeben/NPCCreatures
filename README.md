@@ -1,6 +1,6 @@
 <center>![NPCCreatures](http://dl.dropbox.com/u/40737374/Villager.png)</center>
-<center><h1>NPCCreatures V1.0</h></center>
-<center><h3><b>[Download](http://dev.bukkit.org/server-mods/npccreatures/files/3-npccreatures-v1-2/)</b> | <b>[Source](https://github.com/Steveice10/NPCCreatures)</b> | <b>[Issues](http://dev.bukkit.org/server-mods/npccreatures/tickets/)</b> | <b>[Javadocs](http://npccreatures.tk/hierarchy.html)</b></h></center>
+<center><h1>NPCCreatures V1.2.6</h></center>
+<center><h3><b>[Download](http://dev.bukkit.org/server-mods/npccreatures/files/5-npccreatures-v1-2-6/)</b> | <b>[Source](https://github.com/Steveice10/NPCCreatures)</b> | <b>[Issues](http://dev.bukkit.org/server-mods/npccreatures/tickets/)</b> | <b>[Javadocs](http://npccreatures.tk/hierarchy.html)</b></h></center>
 
 
 
@@ -12,6 +12,12 @@ For Server Admins
 You can spawn NPCs of any mob type you want - yes, even Enderdragons! - and if you (optionally) have Spout installed, you can give them overhead names.
 
     /createnpc <name> [type]
+
+And yes, you can delete them, too.
+
+    /deletenpc <id>
+
+Note that you need the NPC ID, not the NPC name. To get the ID, look in the config.yml for the NPC's entry and get the ID from the section title.
 
 For Plugin Devs
 ============
