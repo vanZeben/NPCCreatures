@@ -179,7 +179,7 @@ public class NPCManager {
 				name = tmp;
 			}
 			BWorld world = getBWorld(l.getWorld());
-            Entity entity = this.createNPCEntity(type, world.getWorldServer(), ChatColor.GREEN + name);
+            Entity entity = this.createNPCEntity(type, world.getWorldServer(), name);
 			entity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
 			world.getWorldServer().addEntity(entity); //the right way
 			if(((NPCCreatures)plugin).isSpoutEnabled) Spout.getServer().setTitle((LivingEntity)entity.getBukkitEntity(), ChatColor.GREEN + name);

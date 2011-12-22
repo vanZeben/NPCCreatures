@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.event.Event;
@@ -116,7 +117,7 @@ public class NPCCreatures extends JavaPlugin {
 							for(NPC npc : plugin.titleQueue)
 							{
 								if(npc.lastNameTime <= 0) {
-									Spout.getServer().setTitle(npc, npc.getName());
+									Spout.getServer().setTitle(npc, ChatColor.GREEN + npc.getName());
 									plugin.titleQueue.remove(npc);
 								} else
 								{
@@ -131,11 +132,29 @@ public class NPCCreatures extends JavaPlugin {
 			}
 			
 		}, 20, 20);
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new ResourceRunnable(this) {
+
+			@Override
+			public void run() {
+				NPCCreatures plugin = (NPCCreatures)params[0];
+				for(NPC npc : plugin.npcManager.getNPCs())
+				{
+					for(org.bukkit.entity.Entity e : npc.getWorld().getEntities())
+					{
+						if(e instanceof Item)
+						{
+							if(npc.getPickupMode() == true && npc.getLocation().distanceSquared(e.getLocation()) < npc.getItemPickupDistance()) npc.pickupItem((Item)e);
+						}
+					}
+				}
+			} 
+		}, 10, 10);
 		System.out.println("["+this.getDescription().getName()+"] "+this.getDescription().getName()+" version "+this.getDescription().getVersion()+" has been enabled!");
 	}
 	
 	public void loadNPCs()
 	{
+		npcManager.spawnNPC("bler", this.getServer().getWorlds().get(0).getSpawnLocation(), NPCType.HUMAN);
 		if(!config.isConfigurationSection("npcs")) config.createSection("npcs");
 		Map<String, Object> npcs = config.getConfigurationSection("npcs").getValues(false);
 		Object o;

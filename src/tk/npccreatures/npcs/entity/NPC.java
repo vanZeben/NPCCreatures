@@ -16,10 +16,9 @@ import org.bukkit.entity.Player;
 import org.getspout.spout.player.SpoutCraftPlayer;
 import org.getspout.spoutapi.Spout;
 import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.packet.PacketEntityTitle;
+import org.getspout.spoutapi.packet.SpoutPacket;
 
 import tk.npccreatures.NPCCreatures;
-import tk.npccreatures.ResourceRunnable;
 import tk.npccreatures.npcs.NPCManager;
 import tk.npccreatures.npcs.pathing.NPCPath;
 import tk.npccreatures.npcs.pathing.NPCPathFinder;
@@ -62,20 +61,6 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 		{
 			ex.printStackTrace();
 		}
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new ResourceRunnable(this) {
-
-			@Override
-			public void run() {
-				NPC npc = (NPC)this.params[0];
-				for(org.bukkit.entity.Entity e : npc.entity.world.getWorld().getEntities())
-				{
-					if(e instanceof Item)
-					{
-						if(npc.getPickupMode() == true && npc.getLocation().distanceSquared(e.getLocation()) < npc.getItemPickupDistance()) npc.pickupItem((Item)e);
-					}
-				}
-			} 
-		}, 10, 10);
 	}
 	
 	/**
@@ -247,7 +232,7 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 				plugin.titleQueue.add(this);
 			}
 		}
-		Bukkit.getServer().broadcastMessage(this.getName()+": "+message);
+		Bukkit.getServer().broadcastMessage(ChatColor.GREEN+this.getName()+ChatColor.WHITE+": "+message);
 	}
 	
 	/**
@@ -257,15 +242,20 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 	 */
 	public void say(String message, Player player)
 	{
+		// TODO: LLLA
 		if(plugin.isSpoutEnabled) {
-			((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
+			try {
+				SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer)SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
 			this.lastNameTime = 5;
 			if(!plugin.titleQueue.contains(this))
 			{
 				plugin.titleQueue.add(this);
 			}
 		}
-		player.sendMessage(this.getName()+": "+message);
+		player.sendMessage(ChatColor.GREEN+this.getName()+ChatColor.WHITE+": "+message);
 	}
 	
 	/**
@@ -278,14 +268,18 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 		for(Player player : players)
 		{
 			if(plugin.isSpoutEnabled) {
-				((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
+				try {
+					SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer)SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
 				this.lastNameTime = 5;
 				if(!plugin.titleQueue.contains(this))
 				{
 					plugin.titleQueue.add(this);
 				}
 			}
-			player.sendMessage(this.getName()+": "+message);
+			player.sendMessage(ChatColor.GREEN+this.getName()+ChatColor.WHITE+": "+message);
 		}
 	}
 	
@@ -302,14 +296,18 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 			if(player.getLocation().distanceSquared(this.getLocation()) <= distance)
 			{
 				if(plugin.isSpoutEnabled) {
-					((SpoutCraftPlayer)SpoutManager.getPlayer(player)).sendDelayedPacket(new PacketEntityTitle(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
+					try {
+						SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer)SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
+					} catch(Exception ex) {
+						ex.printStackTrace();
+					}
 					this.lastNameTime = 5;
 					if(!plugin.titleQueue.contains(this))
 					{
 						plugin.titleQueue.add(this);
 					}
 				}
-				player.sendMessage(this.getName()+": "+message);
+				player.sendMessage(ChatColor.GREEN+this.getName()+ChatColor.WHITE+": "+message);
 			}
 		}
 	}

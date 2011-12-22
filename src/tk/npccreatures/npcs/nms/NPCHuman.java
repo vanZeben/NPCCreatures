@@ -8,6 +8,7 @@ import net.minecraft.server.World;
 import net.minecraft.server.WorldServer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -25,7 +26,7 @@ public class NPCHuman extends EntityPlayer {
 	private int lastBounceId;
 	
 	public NPCHuman(NPCManager npcManager, World world, String s, ItemInWorldManager itemInWorldManager) {
-		super(npcManager.getServer().getMCServer(), world, s, itemInWorldManager);
+		super(npcManager.getServer().getMCServer(), world, ChatColor.GREEN + s, itemInWorldManager);
 		
 		itemInWorldManager.b(1);
 		

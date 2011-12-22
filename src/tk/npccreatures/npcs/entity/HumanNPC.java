@@ -5,6 +5,7 @@ import net.minecraft.server.Packet18ArmAnimation;
 import net.minecraft.server.WorldServer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.CraftServer;
@@ -62,7 +63,7 @@ public class HumanNPC extends NPC {
 	 * @param The new name of the NPC.
 	 */
 	public void setName(String name) {
-		((NPCHuman) getEntity()).name = name;
+		((NPCHuman) getEntity()).name = ChatColor.GREEN + name;
 	}
 	
 	/**
@@ -70,7 +71,7 @@ public class HumanNPC extends NPC {
 	 * @return The NPCs name.
 	 */
 	public String getName() {
-		return ((NPCHuman) getEntity()).name;
+		return ((NPCHuman) getEntity()).name.substring(2);
 	}
 	
 	/**
