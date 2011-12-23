@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCCaveSpider;
  */
 public class CaveSpiderNPC extends NPC {
 
-	public CaveSpiderNPC(NPCCaveSpider entity, String name)
-	{
+	public CaveSpiderNPC(NPCCaveSpider entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

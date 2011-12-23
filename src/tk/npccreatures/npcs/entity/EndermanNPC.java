@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCEnderman;
  */
 public class EndermanNPC extends NPC {
 
-	public EndermanNPC(NPCEnderman entity, String name)
-	{
+	public EndermanNPC(NPCEnderman entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

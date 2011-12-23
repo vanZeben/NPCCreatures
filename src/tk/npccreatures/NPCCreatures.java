@@ -25,7 +25,6 @@ import tk.npccreatures.npcs.NPCManager;
 import tk.npccreatures.npcs.NPCType;
 import tk.npccreatures.npcs.entity.NPC;
 
-
 public class NPCCreatures extends JavaPlugin {
 
 	protected NPCManager npcManager;
@@ -34,18 +33,19 @@ public class NPCCreatures extends JavaPlugin {
 	public NPCCreaturesServerListener serverListener = new NPCCreaturesServerListener(this);
 	public List<NPC> titleQueue;
 	public boolean pickupsEnabled = false;
-	
+
 	@Override
 	public void onDisable() {
 		try {
 			File npcCreaturesSave = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "config.yml");
-			if(!npcCreaturesSave.exists()) npcCreaturesSave.mkdir();
+			if (!npcCreaturesSave.exists())
+				npcCreaturesSave.mkdir();
 			config.save(npcCreaturesSave);
 			npcManager.despawnAll();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("["+this.getDescription().getName()+"] "+this.getDescription().getName()+" version "+this.getDescription().getVersion()+" has been disabled!");
+		System.out.println("[" + this.getDescription().getName() + "] " + this.getDescription().getName() + " version " + this.getDescription().getVersion() + " has been disabled!");
 	}
 
 	@Override
@@ -53,12 +53,11 @@ public class NPCCreatures extends JavaPlugin {
 		this.titleQueue = new ArrayList<NPC>();
 		npcManager = new NPCManager(this);
 		config = this.getConfig();
-		if(this.getServer().getPluginManager().getPlugin("Spout") != null)
-		{
+		if (this.getServer().getPluginManager().getPlugin("Spout") != null) {
 			this.isSpoutEnabled = true;
 		}
 		File npcCreaturesSave = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "config.yml");
-		if(!npcCreaturesSave.exists()) {
+		if (!npcCreaturesSave.exists()) {
 			try {
 				config.save(npcCreaturesSave);
 			} catch (Exception e) {
@@ -67,26 +66,24 @@ public class NPCCreatures extends JavaPlugin {
 		}
 		try {
 			config.load(npcCreaturesSave);
-			if(!config.contains("pickup")) {
+			if (!config.contains("pickup")) {
 				// Compatibility code for old configuration format
-				if(!config.isConfigurationSection("npcs")) {
+				if (!config.isConfigurationSection("npcs")) {
 					ConfigurationSection np = config.createSection("npcs");
 					Map<String, Object> npcs = config.getValues(false);
 					Object o;
 					ConfigurationSection b;
 					MemorySection d;
 					Map<String, Object> vals;
-					for(String id : npcs.keySet())
-					{
-						if(id.equals("npcs")) continue;
+					for (String id : npcs.keySet()) {
+						if (id.equals("npcs"))
+							continue;
 						o = npcs.get(id);
-						if(o instanceof MemorySection)
-						{
+						if (o instanceof MemorySection) {
 							b = np.createSection(id);
 							d = (MemorySection) o;
 							vals = d.getValues(false);
-							for(String id2 : vals.keySet())
-							{
+							for (String id2 : vals.keySet()) {
 								b.set(id2, d.get(id2));
 							}
 							config.set(id, null);
@@ -97,7 +94,8 @@ public class NPCCreatures extends JavaPlugin {
 				config.set("pickup", false);
 				config.save(npcCreaturesSave);
 			}
-			if(config.getBoolean("pickup")) this.pickupsEnabled = true;
+			if (config.getBoolean("pickup"))
+				this.pickupsEnabled = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -108,131 +106,116 @@ public class NPCCreatures extends JavaPlugin {
 
 			@Override
 			public void run() {
-				NPCCreatures plugin = (NPCCreatures)params[0];
-				if(plugin.isSpoutEnabled)
-				{
-					if(plugin.titleQueue.size() > 0)
-					{
+				NPCCreatures plugin = (NPCCreatures) params[0];
+				if (plugin.isSpoutEnabled) {
+					if (plugin.titleQueue.size() > 0) {
 						try {
-							for(NPC npc : plugin.titleQueue)
-							{
-								if(npc.lastNameTime <= 0) {
+							for (NPC npc : plugin.titleQueue) {
+								if (npc.lastNameTime <= 0) {
 									Spout.getServer().setTitle(npc, ChatColor.GREEN + npc.getName());
 									plugin.titleQueue.remove(npc);
-								} else
-								{
+								} else {
 									npc.lastNameTime--;
 								}
 							}
-						} catch(ConcurrentModificationException cex) {
-							
+						} catch (ConcurrentModificationException cex) {
+
 						}
 					}
 				}
 			}
-			
+
 		}, 20, 20);
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new ResourceRunnable(this) {
 
 			@Override
 			public void run() {
-				NPCCreatures plugin = (NPCCreatures)params[0];
-				for(NPC npc : plugin.npcManager.getNPCs())
-				{
-					for(org.bukkit.entity.Entity e : npc.getWorld().getEntities())
-					{
-						if(e instanceof Item)
-						{
-							if(npc.getPickupMode() == true && npc.getLocation().distanceSquared(e.getLocation()) < npc.getItemPickupDistance()) npc.pickupItem((Item)e);
+				NPCCreatures plugin = (NPCCreatures) params[0];
+				for (NPC npc : plugin.npcManager.getNPCs()) {
+					for (org.bukkit.entity.Entity e : npc.getWorld().getEntities()) {
+						if (e instanceof Item) {
+							if (npc.getPickupMode() == true && npc.getLocation().distanceSquared(e.getLocation()) < npc.getItemPickupDistance())
+								npc.pickupItem((Item) e);
 						}
 					}
 				}
-			} 
+			}
 		}, 10, 10);
-		System.out.println("["+this.getDescription().getName()+"] "+this.getDescription().getName()+" version "+this.getDescription().getVersion()+" has been enabled!");
+		System.out.println("[" + this.getDescription().getName() + "] " + this.getDescription().getName() + " version " + this.getDescription().getVersion() + " has been enabled!");
 	}
-	
-	public void loadNPCs()
-	{
+
+	public void loadNPCs() {
 		npcManager.spawnNPC("bler", this.getServer().getWorlds().get(0).getSpawnLocation(), NPCType.HUMAN);
-		if(!config.isConfigurationSection("npcs")) config.createSection("npcs");
+		if (!config.isConfigurationSection("npcs"))
+			config.createSection("npcs");
 		Map<String, Object> npcs = config.getConfigurationSection("npcs").getValues(false);
 		Object o;
 		MemorySection data;
-		for(String id : npcs.keySet())
-		{
+		for (String id : npcs.keySet()) {
 			o = npcs.get(id);
-			if(o instanceof MemorySection)
-			{
+			if (o instanceof MemorySection) {
 				data = (MemorySection) o;
 				try {
 					npcManager.spawnNPC(data.getString("name"), new Location(this.getServer().getWorld(data.getString("world")), data.getInt("x"), data.getInt("y"), data.getInt("z"), (float) data.getDouble("yaw"), (float) data.getDouble("pitch")), NPCType.valueOf(data.getString("type")), id);
-				} catch(Exception ex) {
+				} catch (Exception ex) {
 					System.err.println("Error spawning an NPC - invalid config - skipping:");
 					ex.printStackTrace();
 				}
 			}
 		}
 	}
-	
-    public boolean onCommand(CommandSender sender, Command command, String commandLabel, String args[]) {
-		if(sender instanceof Player)
-		{
-			if(command.getName().equalsIgnoreCase("createnpc"))
-			{
-				if(args.length < 1)
-				{
-					sender.sendMessage(ChatColor.RED+"Usage: /createnpc <name> [type]");
-					sender.sendMessage(ChatColor.RED+"Valid types are: zombie, creeper, spider, skeleton, enderman, blaze, magmacube, silverfish, pigzombie, slime, cavespider, villager, human, mooshroom, cow, pig, sheep, chicken, wolf, squid, snowman, ghast, giant, enderdragon.");
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String args[]) {
+		if (sender instanceof Player) {
+			if (command.getName().equalsIgnoreCase("createnpc")) {
+				if (args.length < 1) {
+					sender.sendMessage(ChatColor.RED + "Usage: /createnpc <name> [type]");
+					sender.sendMessage(ChatColor.RED + "Valid types are: zombie, creeper, spider, skeleton, enderman, blaze, magmacube, silverfish, pigzombie, slime, cavespider, villager, human, mooshroom, cow, pig, sheep, chicken, wolf, squid, snowman, ghast, giant, enderdragon.");
 					return true;
 				}
 				String name = args[0];
 				NPCType type = NPCType.HUMAN;
-				if(args.length > 1) {
+				if (args.length > 1) {
 					try {
 						type = NPCType.valueOf(args[1].toUpperCase());
-					} catch(Exception e)
-					{
-						sender.sendMessage(ChatColor.RED+"Invalid NPC type. Valid types are: zombie, creeper, spider, skeleton, enderman, blaze, magmacube, silverfish, pigzombie, slime, cavespider, villager, human, mooshroom, cow, pig, sheep, chicken, wolf, squid, snowman.");
+					} catch (Exception e) {
+						sender.sendMessage(ChatColor.RED + "Invalid NPC type. Valid types are: zombie, creeper, spider, skeleton, enderman, blaze, magmacube, silverfish, pigzombie, slime, cavespider, villager, human, mooshroom, cow, pig, sheep, chicken, wolf, squid, snowman.");
 						return true;
 					}
 				}
-				if(type == null)
-				{
-					sender.sendMessage(ChatColor.RED+"Invalid NPC type. Valid types are: zombie, creeper, spider, skeleton, enderman, blaze, magmacube, silverfish, pigzombie, slime, cavespider, villager, human, mooshroom, cow, pig, sheep, chicken, wolf, squid, snowman.");
+				if (type == null) {
+					sender.sendMessage(ChatColor.RED + "Invalid NPC type. Valid types are: zombie, creeper, spider, skeleton, enderman, blaze, magmacube, silverfish, pigzombie, slime, cavespider, villager, human, mooshroom, cow, pig, sheep, chicken, wolf, squid, snowman.");
 					return true;
 				}
-				NPC npc = this.npcManager.spawnNPC(name, ((Player)sender).getLocation(), type);
+				NPC npc = this.npcManager.spawnNPC(name, ((Player) sender).getLocation(), type);
 				Hashtable<String, Object> data = new Hashtable<String, Object>();
 				data.put("name", npc.getName());
 				data.put("type", type.toString());
-				data.put("x", ((Player)sender).getLocation().getX());
-				data.put("y", ((Player)sender).getLocation().getY());
-				data.put("z", ((Player)sender).getLocation().getZ());
-				data.put("yaw", ((Player)sender).getLocation().getYaw());
-				data.put("pitch", ((Player)sender).getLocation().getPitch());
-				data.put("world", ((Player)sender).getLocation().getWorld().getName());
+				data.put("x", ((Player) sender).getLocation().getX());
+				data.put("y", ((Player) sender).getLocation().getY());
+				data.put("z", ((Player) sender).getLocation().getZ());
+				data.put("yaw", ((Player) sender).getLocation().getYaw());
+				data.put("pitch", ((Player) sender).getLocation().getPitch());
+				data.put("world", ((Player) sender).getLocation().getWorld().getName());
 				this.config.getConfigurationSection("npcs").createSection(npc.getNPCId(), data);
-				sender.sendMessage(ChatColor.GREEN+"Successfully created an npc with type "+type.toString()+"!");
+				sender.sendMessage(ChatColor.GREEN + "Successfully created an npc with type " + type.toString() + "!");
 				return true;
 			}
-			if(command.getName().equalsIgnoreCase("deletenpc"))
-			{
-				if(args.length < 1)
-				{
-					sender.sendMessage(ChatColor.RED+"Usage: /deletenpc <id>");
+			if (command.getName().equalsIgnoreCase("deletenpc")) {
+				if (args.length < 1) {
+					sender.sendMessage(ChatColor.RED + "Usage: /deletenpc <id>");
 					return true;
 				}
 				this.npcManager.despawnById(args[0]);
 				this.config.getConfigurationSection("npcs").set(args[0], null);
-				sender.sendMessage(ChatColor.GREEN+"NPC successfully deleted!");
+				sender.sendMessage(ChatColor.GREEN + "NPC successfully deleted!");
 			}
 		}
 		return true;
 	}
-    
-    public NPCManager getNPCManager()
-    {
-    	return this.npcManager;
-    }
+
+	public NPCManager getNPCManager() {
+		return this.npcManager;
+	}
 }

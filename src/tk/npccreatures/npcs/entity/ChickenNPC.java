@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCChicken;
  */
 public class ChickenNPC extends NPC {
 
-	public ChickenNPC(NPCChicken entity, String name)
-	{
+	public ChickenNPC(NPCChicken entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

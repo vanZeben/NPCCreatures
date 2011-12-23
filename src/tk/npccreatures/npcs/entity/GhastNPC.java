@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCGhast;
  */
 public class GhastNPC extends NPC {
 
-	public GhastNPC(NPCGhast entity, String name)
-	{
+	public GhastNPC(NPCGhast entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

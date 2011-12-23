@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCEnderDragon;
  */
 public class EnderDragonNPC extends NPC {
 
-	public EnderDragonNPC(NPCEnderDragon entity, String name)
-	{
+	public EnderDragonNPC(NPCEnderDragon entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

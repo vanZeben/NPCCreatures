@@ -1,5 +1,6 @@
 package tk.npccreatures.npcs.nms;
 
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -13,64 +14,63 @@ import net.minecraft.server.World;
 
 public class NPCGhast extends EntityGhast {
 
-	public NPCGhast(World world)
-	{
+	public NPCGhast(World world) {
 		super(world);
 	}
-	
-	public void setBukkitEntity(org.bukkit.entity.Entity entity)
-	{
+
+	public void setBukkitEntity(org.bukkit.entity.Entity entity) {
 		this.bukkitEntity = entity;
 	}
-	
+
 	@Override
 	public void move(double arg0, double arg1, double arg2) {
 		return;
 	}
-	
+
 	@Override
 	public boolean damageEntity(DamageSource source, int damage) {
 		return false;
 	}
-	
+
 	@Override
 	public void die() {
 		return;
 	}
-	
-	//PathFinding
+
+	// PathFinding
 	@Override
-    protected void m_() {
-    	return;
-    }
-	
-	//Movement?
+	protected void m_() {
+		return;
+	}
+
+	// Movement?
 	@Override
-    public void d() {
-		final Location loc = this.getBukkitEntity().getLocation();
-		final List<Player> players = this.world.getWorld().getPlayers();
-		final Packet34EntityTeleport packet = new Packet34EntityTeleport(this);
-		
-		for(Player player : players)
-		{
-			if(player.getLocation().distanceSquared(loc) < 4096) {
-				((CraftPlayer)player).getHandle().netServerHandler.sendPacket(packet);
+	public void d() {
+		try {
+			final Location loc = this.getBukkitEntity().getLocation();
+			final List<Player> players = this.world.getWorld().getPlayers();
+			final Packet34EntityTeleport packet = new Packet34EntityTeleport(this);
+
+			for (Player player : players) {
+				if (player.getLocation().distanceSquared(loc) < 4096) {
+					((CraftPlayer) player).getHandle().netServerHandler.sendPacket(packet);
+				}
 			}
+		} catch (ConcurrentModificationException ex) {
 		}
-		
-        for (int i = 0; i < 2; ++i) {
-            this.world.a("largesmoke", this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
-        }
-        
-    	return;
-    }
-	
-	//onUpdate
+
+		for (int i = 0; i < 2; ++i) {
+			this.world.a("largesmoke", this.locX + (this.random.nextDouble() - 0.5D) * this.width, this.locY + this.random.nextDouble() * this.length, this.locZ + (this.random.nextDouble() - 0.5D) * this.width, 0.0D, 0.0D, 0.0D);
+		}
+
+		return;
+	}
+
+	// onUpdate
 	@Override
-	public void w_()
-	{
+	public void w_() {
 		super.w_();
 		return;
 	}
-	
+
 }

@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCMooshroom;
  */
 public class MooshroomNPC extends NPC {
 
-	public MooshroomNPC(NPCMooshroom entity, String name)
-	{
+	public MooshroomNPC(NPCMooshroom entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

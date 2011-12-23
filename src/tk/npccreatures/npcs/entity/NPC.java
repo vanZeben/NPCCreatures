@@ -1,6 +1,5 @@
 package tk.npccreatures.npcs.entity;
 
-
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +32,7 @@ import net.minecraft.server.Packet22Collect;
  * Represents an NPC.
  */
 public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
-	
+
 	protected Entity entity;
 	private NPCPathFinder path;
 	private Iterator<Node> pathIterator;
@@ -47,54 +46,58 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 	protected NPCCreatures plugin;
 	private int itemPickupDistance = 2;
 	private boolean pickupMode = false;
-	
+
 	public NPC(EntityLiving entity, String name) {
-		super((CraftServer)Bukkit.getServer(), entity);
+		super((CraftServer) Bukkit.getServer(), entity);
 		this.entity = entity;
 		this.name = name;
-		this.plugin = ((NPCCreatures)((CraftServer)Bukkit.getServer()).getPluginManager().getPlugin("NPCCreatures"));
+		this.plugin = ((NPCCreatures) ((CraftServer) Bukkit.getServer()).getPluginManager().getPlugin("NPCCreatures"));
 		try {
 			Field field = Entity.class.getDeclaredField("bukkitEntity");
 			field.setAccessible(true);
 			field.set(this.entity, this);
-		} catch(Exception ex)
-		{
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Gets the NMS entity of the NPC.
+	 * 
 	 * @return The NMS entity of the NPC.
 	 */
 	public Entity getEntity() {
 		return entity;
 	}
-	
+
 	/**
 	 * Gets the name of the NPC.
+	 * 
 	 * @return The NPCs name.
 	 */
 	public String getName() {
 		return this.name;
 	}
-	
+
 	/**
 	 * Gets the ID of the npc.
+	 * 
 	 * @return The NPCs ID.
 	 */
 	public String getNPCId() {
 		return this.npcId;
-	}	
-	
+	}
+
 	/**
 	 * Sets the ID of an NPC
-	 * @param ID to set.
+	 * 
+	 * @param ID
+	 *            to set.
 	 */
 	public void setNPCId(String id) {
 		this.npcId = id;
 	}
-	
+
 	/**
 	 * Removes the entity from the world.
 	 */
@@ -105,24 +108,31 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 			e.printStackTrace();
 		}
 	}
-	
-	//TODO: Confirm javadoc.
+
+	// TODO: Confirm javadoc.
 	/**
 	 * Path finds the NPC to the given location.
-	 * @param Location to path find to.
-	 * @param PathReturn to run the path find.
-	 */	
+	 * 
+	 * @param Location
+	 *            to path find to.
+	 * @param PathReturn
+	 *            to run the path find.
+	 */
 	public void pathFindTo(Location l, PathReturn callback) {
 		pathFindTo(l, 3000, callback);
 	}
-	
-	//TODO: Confirm javadoc.
+
+	// TODO: Confirm javadoc.
 	/**
 	 * Path finds the NPC to the given location.
-	 * @param Location to path find to.
-	 * @param Max iterations for the path.
-	 * @param PathReturn to run the path find.
-	 */	
+	 * 
+	 * @param Location
+	 *            to path find to.
+	 * @param Max
+	 *            iterations for the path.
+	 * @param PathReturn
+	 *            to run the path find.
+	 */
 	public void pathFindTo(Location l, int maxIterations, PathReturn callback) {
 		if (path != null) {
 			path.cancel = true;
@@ -130,26 +140,31 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 		path = new NPCPathFinder(getEntity().getBukkitEntity().getLocation(), l, maxIterations, callback);
 		path.start();
 	}
-	
+
 	/**
 	 * Tells the NPC to walk to a location.
-	 * @param Location to walk to.
+	 * 
+	 * @param Location
+	 *            to walk to.
 	 */
 	public void walkTo(Location l) {
 		walkTo(l, 3000);
 	}
-	
+
 	/**
 	 * Tells the NPC to walk to a location.
-	 * @param Location to walk to.
-	 * @param Max iterations for the path.
+	 * 
+	 * @param Location
+	 *            to walk to.
+	 * @param Max
+	 *            iterations for the path.
 	 */
 	public void walkTo(final Location l, final int maxIterations) {
 		pathFindTo(l, maxIterations, new PathReturn() {
 			@Override
 			public void run(NPCPath path) {
 				usePath(path, new Runnable() {
-					
+
 					@Override
 					public void run() {
 						walkTo(l, maxIterations);
@@ -158,10 +173,12 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 			}
 		});
 	}
-	
+
 	/**
 	 * Tells an NPC to walk using a specified path.
-	 * @param Path to use.
+	 * 
+	 * @param Path
+	 *            to use.
 	 */
 	public void usePath(NPCPath path) {
 		usePath(path, new Runnable() {
@@ -171,11 +188,14 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 			}
 		});
 	}
-	
+
 	/**
 	 * Tells an NPC to walk using a specified path.
-	 * @param Path to use.
-	 * @param Runnable to call if the path fails.
+	 * 
+	 * @param Path
+	 *            to use.
+	 * @param Runnable
+	 *            to call if the path fails.
 	 */
 	public void usePath(NPCPath path, Runnable onFail) {
 		if (taskid == 0) {
@@ -190,7 +210,7 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 		runningPath = path;
 		this.onFail = onFail;
 	}
-	
+
 	/**
 	 * Tells the NPC to do the next step on its path.
 	 */
@@ -217,140 +237,148 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 			taskid = 0;
 		}
 	}
-	
+
 	/**
 	 * Sends a chat message from the NPC.
-	 * @param Message to send.
+	 * 
+	 * @param Message
+	 *            to send.
 	 */
-	public void say(String message)
-	{
-		if(plugin.isSpoutEnabled) {
-			Spout.getServer().setTitle(this, ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName());
+	public void say(String message) {
+		if (plugin.isSpoutEnabled) {
+			Spout.getServer().setTitle(this, ChatColor.YELLOW + message + "\n" + ChatColor.GREEN + this.getName());
 			this.lastNameTime = 5;
-			if(!plugin.titleQueue.contains(this))
-			{
+			if (!plugin.titleQueue.contains(this)) {
 				plugin.titleQueue.add(this);
 			}
 		}
-		Bukkit.getServer().broadcastMessage(ChatColor.GREEN+this.getName()+ChatColor.WHITE+": "+message);
+		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + this.getName() + ChatColor.WHITE + ": " + message);
 	}
-	
+
 	/**
 	 * Sends a chat message from the NPC to a certain player.
-	 * @param Message to send.
-	 * @param Player to send the message to.
+	 * 
+	 * @param Message
+	 *            to send.
+	 * @param Player
+	 *            to send the message to.
 	 */
-	public void say(String message, Player player)
-	{
+	public void say(String message, Player player) {
 		// TODO: LLLA
-		if(plugin.isSpoutEnabled) {
+		if (plugin.isSpoutEnabled) {
 			try {
-				SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer)SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
-			} catch(Exception ex) {
+				SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer) SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW + message + "\n" + ChatColor.GREEN + this.getName()));
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 			this.lastNameTime = 5;
-			if(!plugin.titleQueue.contains(this))
-			{
+			if (!plugin.titleQueue.contains(this)) {
 				plugin.titleQueue.add(this);
 			}
 		}
-		player.sendMessage(ChatColor.GREEN+this.getName()+ChatColor.WHITE+": "+message);
+		player.sendMessage(ChatColor.GREEN + this.getName() + ChatColor.WHITE + ": " + message);
 	}
-	
+
 	/**
 	 * Sends a chat message from the NPC to a group of players.
-	 * @param Message to send.
-	 * @param Players to send the message to.
+	 * 
+	 * @param Message
+	 *            to send.
+	 * @param Players
+	 *            to send the message to.
 	 */
-	public void say(String message, List<Player> players)
-	{
-		for(Player player : players)
-		{
-			if(plugin.isSpoutEnabled) {
+	public void say(String message, List<Player> players) {
+		for (Player player : players) {
+			if (plugin.isSpoutEnabled) {
 				try {
-					SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer)SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
-				} catch(Exception ex) {
+					SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer) SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW + message + "\n" + ChatColor.GREEN + this.getName()));
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 				this.lastNameTime = 5;
-				if(!plugin.titleQueue.contains(this))
-				{
+				if (!plugin.titleQueue.contains(this)) {
 					plugin.titleQueue.add(this);
 				}
 			}
-			player.sendMessage(ChatColor.GREEN+this.getName()+ChatColor.WHITE+": "+message);
+			player.sendMessage(ChatColor.GREEN + this.getName() + ChatColor.WHITE + ": " + message);
 		}
 	}
-	
+
 	/**
 	 * Sends a chat message from the NPC to players within a certain distance.
-	 * @param Message to send.
-	 * @param Distance to send the message.
+	 * 
+	 * @param Message
+	 *            to send.
+	 * @param Distance
+	 *            to send the message.
 	 */
-	public void say(String message, int distance)
-	{
+	public void say(String message, int distance) {
 		Player players[] = Bukkit.getServer().getOnlinePlayers();
-		for(Player player : players)
-		{
-			if(player.getLocation().distanceSquared(this.getLocation()) <= distance)
-			{
-				if(plugin.isSpoutEnabled) {
+		for (Player player : players) {
+			if (player.getLocation().distanceSquared(this.getLocation()) <= distance) {
+				if (plugin.isSpoutEnabled) {
 					try {
-						SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer)SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW+message+"\n"+ChatColor.GREEN+this.getName()));
-					} catch(Exception ex) {
+						SpoutCraftPlayer.class.getMethod("sendDelayedPacket", SpoutPacket.class).invoke(((SpoutCraftPlayer) SpoutManager.getPlayer(player)), Class.forName("org.getspout.spoutapi.packet.PacketEntityTitle").getDeclaredConstructor(int.class, String.class).newInstance(this.getEntityId(), ChatColor.YELLOW + message + "\n" + ChatColor.GREEN + this.getName()));
+					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 					this.lastNameTime = 5;
-					if(!plugin.titleQueue.contains(this))
-					{
+					if (!plugin.titleQueue.contains(this)) {
 						plugin.titleQueue.add(this);
 					}
 				}
-				player.sendMessage(ChatColor.GREEN+this.getName()+ChatColor.WHITE+": "+message);
+				player.sendMessage(ChatColor.GREEN + this.getName() + ChatColor.WHITE + ": " + message);
 			}
 		}
 	}
-	
+
 	/**
 	 * Makes the NPC pickup an item.
-	 * @param Item to pickup.
+	 * 
+	 * @param Item
+	 *            to pickup.
 	 */
 	public void pickupItem(Item item) {
-        ((CraftServer)this.plugin.getServer()).getServer().getTracker(((CraftWorld)this.getWorld()).getHandle().dimension).a(entity, new Packet22Collect(item.getEntityId(), this.getEntityId()));
-        item.remove();
+		((CraftServer) this.plugin.getServer()).getServer().getTracker(((CraftWorld) this.getWorld()).getHandle().dimension).a(entity, new Packet22Collect(item.getEntityId(), this.getEntityId()));
+		item.remove();
 	}
-	
+
 	/**
 	 * Sets whether the NPC picks up items or not.
-	 * @param Mode to set.
+	 * 
+	 * @param Mode
+	 *            to set.
 	 */
 	public void setPickupMode(boolean mode) {
 		this.pickupMode = true;
 	}
-	
+
 	/**
 	 * Gets whether the NPC picks up items or not.
+	 * 
 	 * @return Current pickup mode.
 	 */
 	public boolean getPickupMode() {
 		return this.pickupMode;
 	}
-	
+
 	/**
 	 * Sets the distance to pickup items over.
-	 * @param Distance to pickup items.
+	 * 
+	 * @param Distance
+	 *            to pickup items.
 	 */
 	public void setItemPickupDistance(int distance) {
 		this.itemPickupDistance = distance;
 	}
-	
+
 	/**
 	 * Gets the distance to pickup items over.
+	 * 
 	 * @return Distance to pickup items.
 	 */
 	public int getItemPickupDistance() {
 		return this.itemPickupDistance;
 	}
-	
+
 }

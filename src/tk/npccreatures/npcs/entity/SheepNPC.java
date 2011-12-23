@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCSheep;
  */
 public class SheepNPC extends NPC {
 
-	public SheepNPC(NPCSheep entity, String name)
-	{
+	public SheepNPC(NPCSheep entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

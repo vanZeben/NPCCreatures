@@ -7,9 +7,8 @@ public class SpiderNPC extends NPC {
 	/**
 	 * Represents a Spider NPC.
 	 */
-	public SpiderNPC(NPCSpider entity, String name)
-	{
+	public SpiderNPC(NPCSpider entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

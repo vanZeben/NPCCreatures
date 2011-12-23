@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCZombie;
  */
 public class ZombieNPC extends NPC {
 
-	public ZombieNPC(NPCZombie entity, String name)
-	{
+	public ZombieNPC(NPCZombie entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

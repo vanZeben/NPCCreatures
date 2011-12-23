@@ -98,5 +98,5 @@ public enum NPCType {
 	 * Represents a Giant NPC.
 	 */
 	GIANT;
-	
+
 }

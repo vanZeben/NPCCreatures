@@ -7,9 +7,8 @@ public class SquidNPC extends NPC {
 	/**
 	 * Represents a Squid NPC.
 	 */
-	public SquidNPC(NPCSquid entity, String name)
-	{
+	public SquidNPC(NPCSquid entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

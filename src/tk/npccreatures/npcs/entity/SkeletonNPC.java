@@ -7,9 +7,8 @@ public class SkeletonNPC extends NPC {
 	/**
 	 * Represents a Skeleton NPC.
 	 */
-	public SkeletonNPC(NPCSkeleton entity, String name)
-	{
+	public SkeletonNPC(NPCSkeleton entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

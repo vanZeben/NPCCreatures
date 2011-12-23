@@ -7,9 +7,8 @@ public class SnowmanNPC extends NPC {
 	/**
 	 * Represents a Snowman NPC.
 	 */
-	public SnowmanNPC(NPCSnowman entity, String name)
-	{
+	public SnowmanNPC(NPCSnowman entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

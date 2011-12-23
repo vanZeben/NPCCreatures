@@ -1,5 +1,6 @@
 package tk.npccreatures.npcs.nms;
 
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -13,70 +14,70 @@ import net.minecraft.server.World;
 
 public class NPCCow extends EntityCow {
 
-	public NPCCow(World world)
-	{
+	public NPCCow(World world) {
 		super(world);
 	}
-	
-	public void setBukkitEntity(org.bukkit.entity.Entity entity)
-	{
+
+	public void setBukkitEntity(org.bukkit.entity.Entity entity) {
 		this.bukkitEntity = entity;
 	}
-	
+
 	@Override
 	public void move(double arg0, double arg1, double arg2) {
 		return;
 	}
-	
+
 	@Override
 	public boolean damageEntity(DamageSource source, int damage) {
 		return false;
 	}
-	
+
 	@Override
 	public void die() {
 		return;
 	}
-	
+
 	@Override
-    protected EntityAnimal createChild(EntityAnimal entityanimal) {
+	protected EntityAnimal createChild(EntityAnimal entityanimal) {
 		return null;
 	}
-	
-	//PathFinding
+
+	// PathFinding
 	@Override
-    protected void m_() {
-    	return;
-    }
-	
-	//Stroll
+	protected void m_() {
+		return;
+	}
+
+	// Stroll
 	@Override
-    public void C() {
-    	return;
-    }
-	
-	//Movement?
+	public void C() {
+		return;
+	}
+
+	// Movement?
 	@Override
-    public void d() {
-		final Location loc = this.getBukkitEntity().getLocation();
-		final List<Player> players = this.world.getWorld().getPlayers();
-		final Packet34EntityTeleport packet = new Packet34EntityTeleport(this);
-		
-		for(Player player : players)
-		{
-			if(player.getLocation().distanceSquared(loc) < 4096) {
-				((CraftPlayer)player).getHandle().netServerHandler.sendPacket(packet);
+	public void d() {
+		try {
+			final Location loc = this.getBukkitEntity().getLocation();
+			final List<Player> players = this.world.getWorld().getPlayers();
+			final Packet34EntityTeleport packet = new Packet34EntityTeleport(this);
+
+			for (Player player : players) {
+				if (player.getLocation().distanceSquared(loc) < 4096) {
+					((CraftPlayer) player).getHandle().netServerHandler.sendPacket(packet);
+				}
 			}
+		} catch (ConcurrentModificationException ex) {
 		}
-        
-    	return;
-    }
-	
-	//onUpdate
+
+		return;
+	}
+
+	// onUpdate
 	@Override
 	public void w_() {
 		super.w_();
 		return;
 	}
-	
+
 }

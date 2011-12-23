@@ -7,9 +7,8 @@ public class SilverfishNPC extends NPC {
 	/**
 	 * Represents a Silverfish NPC.
 	 */
-	public SilverfishNPC(NPCSilverfish entity, String name)
-	{
+	public SilverfishNPC(NPCSilverfish entity, String name) {
 		super(entity, name);
 	}
-	
+
 }

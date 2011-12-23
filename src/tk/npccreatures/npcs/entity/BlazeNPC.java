@@ -7,9 +7,8 @@ import tk.npccreatures.npcs.nms.NPCBlaze;
  */
 public class BlazeNPC extends NPC {
 
-	public BlazeNPC(NPCBlaze entity, String name)
-	{
+	public BlazeNPC(NPCBlaze entity, String name) {
 		super(entity, name);
 	}
-	
+
 }
