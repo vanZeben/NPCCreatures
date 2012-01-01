@@ -9,6 +9,7 @@ public class MooshroomNPC extends NPC {
 
 	public MooshroomNPC(NPCMooshroom entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

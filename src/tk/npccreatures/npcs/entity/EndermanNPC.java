@@ -9,6 +9,7 @@ public class EndermanNPC extends NPC {
 
 	public EndermanNPC(NPCEnderman entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

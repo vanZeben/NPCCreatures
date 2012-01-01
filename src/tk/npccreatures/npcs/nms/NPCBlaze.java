@@ -3,9 +3,13 @@ package tk.npccreatures.npcs.nms;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+
+import tk.npccreatures.NPCCreatures;
+import tk.npccreatures.npcs.entity.BlazeNPC;
 
 import net.minecraft.server.DamageSource;
 import net.minecraft.server.Entity;
@@ -57,7 +61,7 @@ public class NPCBlaze extends EntityBlaze {
 			final Location loc = this.getBukkitEntity().getLocation();
 			final List<Player> players = this.world.getWorld().getPlayers();
 			final Packet34EntityTeleport packet = new Packet34EntityTeleport(this);
-
+			
 			for (Player player : players) {
 				if (player.getLocation().distanceSquared(loc) < 4096) {
 					((CraftPlayer) player).getHandle().netServerHandler.sendPacket(packet);

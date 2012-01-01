@@ -9,6 +9,7 @@ public class GhastNPC extends NPC {
 
 	public GhastNPC(NPCGhast entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

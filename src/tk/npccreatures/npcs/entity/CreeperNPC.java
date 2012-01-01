@@ -9,6 +9,7 @@ public class CreeperNPC extends NPC {
 
 	public CreeperNPC(NPCCreeper entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 	/**

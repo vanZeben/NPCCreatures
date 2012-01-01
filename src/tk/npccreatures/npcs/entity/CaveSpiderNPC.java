@@ -9,6 +9,7 @@ public class CaveSpiderNPC extends NPC {
 
 	public CaveSpiderNPC(NPCCaveSpider entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

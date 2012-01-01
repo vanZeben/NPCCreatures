@@ -9,6 +9,7 @@ public class SlimeNPC extends NPC {
 	 */
 	public SlimeNPC(NPCSlime entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 	public void setSize(int size) {

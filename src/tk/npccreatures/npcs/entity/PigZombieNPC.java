@@ -9,6 +9,7 @@ public class PigZombieNPC extends NPC {
 
 	public PigZombieNPC(NPCPigZombie entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

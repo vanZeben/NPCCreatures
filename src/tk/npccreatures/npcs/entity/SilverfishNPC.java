@@ -9,6 +9,7 @@ public class SilverfishNPC extends NPC {
 	 */
 	public SilverfishNPC(NPCSilverfish entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

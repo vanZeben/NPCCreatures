@@ -9,6 +9,7 @@ public class SnowmanNPC extends NPC {
 	 */
 	public SnowmanNPC(NPCSnowman entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

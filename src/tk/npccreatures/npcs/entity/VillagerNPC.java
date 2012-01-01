@@ -14,6 +14,7 @@ public class VillagerNPC extends NPC {
 
 	public VillagerNPC(NPCVillager entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 	/**

@@ -9,6 +9,7 @@ public class SheepNPC extends NPC {
 
 	public SheepNPC(NPCSheep entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

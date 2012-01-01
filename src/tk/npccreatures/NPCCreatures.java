@@ -145,7 +145,6 @@ public class NPCCreatures extends JavaPlugin {
 	}
 
 	public void loadNPCs() {
-		npcManager.spawnNPC("bler", this.getServer().getWorlds().get(0).getSpawnLocation(), NPCType.HUMAN);
 		if (!config.isConfigurationSection("npcs"))
 			config.createSection("npcs");
 		Map<String, Object> npcs = config.getConfigurationSection("npcs").getValues(false);

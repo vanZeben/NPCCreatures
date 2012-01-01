@@ -9,6 +9,7 @@ public class EnderDragonNPC extends NPC {
 
 	public EnderDragonNPC(NPCEnderDragon entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

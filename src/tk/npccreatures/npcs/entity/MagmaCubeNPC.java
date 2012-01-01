@@ -9,6 +9,7 @@ public class MagmaCubeNPC extends NPC {
 
 	public MagmaCubeNPC(NPCMagmaCube entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 	/**

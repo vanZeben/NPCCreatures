@@ -1,6 +1,5 @@
 package tk.npccreatures.npcs.entity;
 
-import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 
@@ -51,14 +50,7 @@ public class NPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity {
 		super((CraftServer) Bukkit.getServer(), entity);
 		this.entity = entity;
 		this.name = name;
-		this.plugin = ((NPCCreatures) ((CraftServer) Bukkit.getServer()).getPluginManager().getPlugin("NPCCreatures"));
-		try {
-			Field field = Entity.class.getDeclaredField("bukkitEntity");
-			field.setAccessible(true);
-			field.set(this.entity, this);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		this.plugin = ((NPCCreatures) Bukkit.getServer().getPluginManager().getPlugin("NPCCreatures"));
 	}
 
 	/**

@@ -9,6 +9,7 @@ public class BlazeNPC extends NPC {
 
 	public BlazeNPC(NPCBlaze entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }

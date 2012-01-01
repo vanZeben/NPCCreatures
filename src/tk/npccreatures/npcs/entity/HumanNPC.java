@@ -25,6 +25,7 @@ public class HumanNPC extends NPC {
 
 	public HumanNPC(NPCHuman npcEntity, String name) {
 		super(npcEntity, name);
+		npcEntity.setBukkitEntity(this);
 	}
 
 	/**

@@ -9,6 +9,7 @@ public class WolfNPC extends NPC {
 
 	public WolfNPC(NPCWolf entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 	public void setSitting(boolean sitting) {

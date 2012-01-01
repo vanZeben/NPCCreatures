@@ -9,6 +9,7 @@ public class SquidNPC extends NPC {
 	 */
 	public SquidNPC(NPCSquid entity, String name) {
 		super(entity, name);
+		entity.setBukkitEntity(this);
 	}
 
 }
