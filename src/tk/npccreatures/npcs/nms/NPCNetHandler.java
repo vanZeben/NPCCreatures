@@ -119,11 +119,6 @@ public class NPCNetHandler extends NetServerHandler {
 	};
 
 	@Override
-	public int b() {
-		return super.b();
-	}
-
-	@Override
 	public void a(Packet130UpdateSign packet130updatesign) {
 	};
 

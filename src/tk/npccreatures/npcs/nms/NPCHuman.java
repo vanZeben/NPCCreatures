@@ -50,11 +50,6 @@ public class NPCHuman extends EntityPlayer {
 	}
 
 	@Override
-	public CraftPlayer getPlayer() {
-		return new CraftPlayer((CraftServer) Bukkit.getServer(), this);
-	}
-
-	@Override
 	public void a_(EntityHuman entity) {
 		if (lastTargetId == -1 || lastTargetId != entity.id) {
 			EntityTargetEvent event = new NpcEntityTargetEvent(getBukkitEntity(), entity.getBukkitEntity(), NpcEntityTargetEvent.NpcTargetReason.CLOSEST_PLAYER);

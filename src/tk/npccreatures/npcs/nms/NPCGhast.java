@@ -68,8 +68,8 @@ public class NPCGhast extends EntityGhast {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 

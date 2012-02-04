@@ -44,7 +44,7 @@ public class NPCSquid extends EntitySquid {
 
 	// Stroll
 	@Override
-	public void C() {
+	public void D() {
 		return;
 	}
 
@@ -69,8 +69,8 @@ public class NPCSquid extends EntitySquid {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 

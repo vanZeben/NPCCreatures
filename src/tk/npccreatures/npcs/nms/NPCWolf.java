@@ -62,7 +62,7 @@ public class NPCWolf extends EntityWolf {
 
 	// Stroll
 	@Override
-	public void C() {
+	public void D() {
 		return;
 	}
 
@@ -87,8 +87,8 @@ public class NPCWolf extends EntityWolf {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 

@@ -93,7 +93,7 @@ public class BWorld {
 
 				List<Entity> entities = new ArrayList<Entity>();
 				AxisAlignedBB bb = AxisAlignedBB.a(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius);
-				entities = craftWorld.getHandle().b(craftPlayer.getHandle(), bb);
+				entities = craftWorld.getHandle().getEntities(craftPlayer.getHandle(), bb);
 				for (Entity o : entities) {
 					if (!(o instanceof EntityPlayer)) {
 						o.getBukkitEntity().remove();

@@ -2,7 +2,7 @@ package tk.npccreatures.npcs.entity;
 
 import tk.npccreatures.npcs.nms.NPCSkeleton;
 
-public class SkeletonNPC extends NPC {
+public class SkeletonNPC extends BaseNPC {
 
 	/**
 	 * Represents a Skeleton NPC.

@@ -21,12 +21,10 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.WorldListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.Spout;
 
@@ -88,8 +86,8 @@ public class NPCManager {
 			public void run() {
 				HashSet<String> toRemove = new HashSet<String>();
 				for (String i : npcs.keySet()) {
-					Entity j = npcs.get(i).getEntity();
-					j.af();
+					Entity j = npcs.get(i).getHandle();
+					j.am();
 					if (j.dead) {
 						toRemove.add(i);
 					}
@@ -99,8 +97,10 @@ public class NPCManager {
 				}
 			}
 		}, 1L, 1L);
-		Bukkit.getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_DISABLE, new SL(), Priority.Normal, plugin);
-		Bukkit.getServer().getPluginManager().registerEvent(Event.Type.CHUNK_LOAD, new WL(), Priority.Normal, plugin);
+		Bukkit.getServer().getPluginManager().registerEvents(new SL(), plugin);
+		Bukkit.getServer().getPluginManager().registerEvents(new WL(), plugin);
+		//Bukkit.getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_DISABLE, new SL(), Priority.Normal, plugin);
+		//Bukkit.getServer().getPluginManager().registerEvent(Event.Type.CHUNK_LOAD, new WL(), Priority.Normal, plugin);
 	}
 
 	/**
@@ -118,8 +118,9 @@ public class NPCManager {
 		return bworld;
 	}
 
-	private class SL extends ServerListener {
-		@Override
+	private class SL implements Listener {
+		@SuppressWarnings("unused")
+		@EventHandler
 		public void onPluginDisable(PluginDisableEvent event) {
 			if (event.getPlugin() == plugin) {
 				despawnAll();
@@ -128,13 +129,14 @@ public class NPCManager {
 		}
 	}
 
-	private class WL extends WorldListener {
-		@Override
+	private class WL implements Listener {
+		@SuppressWarnings("unused")
+		@EventHandler
 		public void onChunkLoad(ChunkLoadEvent event) {
 			for (NPC npc : npcs.values()) {
 				if (npc != null && event.getChunk() == npc.getLocation().getBlock().getChunk()) {
 					BWorld world = getBWorld(event.getWorld());
-					world.getWorldServer().addEntity(npc.getEntity());
+					world.getWorldServer().addEntity(npc.getHandle());
 				}
 			}
 		}
@@ -438,21 +440,8 @@ public class NPCManager {
 			server.getLogger().log(Level.WARNING, name + " has been shortened to " + tmp);
 			name = tmp;
 		}
-		HumanNPC npc = (HumanNPC) getNPC(id);
+		NPC npc = getNPC(id);
 		npc.setName(name);
-		BWorld b = getBWorld(npc.getLocation().getWorld());
-		WorldServer s = b.getWorldServer();
-		try {
-			Method m = s.getClass().getDeclaredMethod("d", new Class[] { Entity.class });
-			m.setAccessible(true);
-			m.invoke(s, npc.getEntity());
-			m = s.getClass().getDeclaredMethod("c", new Class[] { Entity.class });
-			m.setAccessible(true);
-			m.invoke(s, npc.getEntity());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		s.everyoneSleeping();
 	}
 
 	/**

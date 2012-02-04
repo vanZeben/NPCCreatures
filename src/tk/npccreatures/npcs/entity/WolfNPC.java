@@ -5,7 +5,7 @@ import tk.npccreatures.npcs.nms.NPCWolf;
 /**
  * Represents a Wolf NPC.
  */
-public class WolfNPC extends NPC {
+public class WolfNPC extends BaseNPC {
 
 	public WolfNPC(NPCWolf entity, String name) {
 		super(entity, name);

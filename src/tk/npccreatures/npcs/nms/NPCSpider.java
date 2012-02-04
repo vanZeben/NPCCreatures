@@ -51,7 +51,7 @@ public class NPCSpider extends EntitySpider {
 
 	// Stroll
 	@Override
-	public void C() {
+	public void D() {
 		return;
 	}
 
@@ -76,8 +76,8 @@ public class NPCSpider extends EntitySpider {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 

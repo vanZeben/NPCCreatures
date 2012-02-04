@@ -2,7 +2,7 @@ package tk.npccreatures.npcs.entity;
 
 import tk.npccreatures.npcs.nms.NPCSnowman;
 
-public class SnowmanNPC extends NPC {
+public class SnowmanNPC extends BaseNPC {
 
 	/**
 	 * Represents a Snowman NPC.

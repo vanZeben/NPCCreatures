@@ -50,7 +50,7 @@ public class NPCChicken extends EntityChicken {
 
 	// Stroll
 	@Override
-	public void C() {
+	public void D() {
 		return;
 	}
 
@@ -75,8 +75,8 @@ public class NPCChicken extends EntityChicken {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 

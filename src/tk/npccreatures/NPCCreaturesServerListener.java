@@ -1,13 +1,14 @@
 package tk.npccreatures;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.server.ServerListener;
 import org.getspout.spoutapi.Spout;
 
 import tk.npccreatures.npcs.entity.NPC;
 
-public class NPCCreaturesServerListener extends ServerListener {
+public class NPCCreaturesServerListener implements Listener {
 
 	private NPCCreatures plugin;
 
@@ -15,7 +16,7 @@ public class NPCCreaturesServerListener extends ServerListener {
 		this.plugin = plugin;
 	}
 
-	@Override
+	@EventHandler
 	public void onPluginEnable(PluginEnableEvent event) {
 		if (event.getPlugin().getDescription().getName().equals("Spout")) {
 			plugin.isSpoutEnabled = true;
@@ -25,7 +26,7 @@ public class NPCCreaturesServerListener extends ServerListener {
 		}
 	}
 
-	@Override
+	@EventHandler
 	public void onPluginDisable(PluginDisableEvent event) {
 		if (event.getPlugin().getDescription().getName().equals("Spout")) {
 			plugin.isSpoutEnabled = false;

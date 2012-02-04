@@ -2,7 +2,7 @@ package tk.npccreatures.npcs.entity;
 
 import tk.npccreatures.npcs.nms.NPCSlime;
 
-public class SlimeNPC extends NPC {
+public class SlimeNPC extends BaseNPC {
 
 	/**
 	 * Represents a Slime NPC.

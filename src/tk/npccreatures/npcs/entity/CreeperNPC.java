@@ -5,7 +5,7 @@ import tk.npccreatures.npcs.nms.NPCCreeper;
 /**
  * Represents a Creeper NPC.
  */
-public class CreeperNPC extends NPC {
+public class CreeperNPC extends BaseNPC {
 
 	public CreeperNPC(NPCCreeper entity, String name) {
 		super(entity, name);

@@ -62,7 +62,7 @@ public class NPCEnderman extends EntityEnderman {
 
 	// Stroll
 	@Override
-	public void C() {
+	public void D() {
 		return;
 	}
 
@@ -91,8 +91,8 @@ public class NPCEnderman extends EntityEnderman {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 

@@ -2,7 +2,7 @@ package tk.npccreatures.npcs.entity;
 
 import tk.npccreatures.npcs.nms.NPCSpider;
 
-public class SpiderNPC extends NPC {
+public class SpiderNPC extends BaseNPC {
 
 	/**
 	 * Represents a Spider NPC.

@@ -10,7 +10,7 @@ import net.minecraft.server.EntityVillager;
 /**
  * Represents a Villager NPC.
  */
-public class VillagerNPC extends NPC {
+public class VillagerNPC extends BaseNPC {
 
 	public VillagerNPC(NPCVillager entity, String name) {
 		super(entity, name);

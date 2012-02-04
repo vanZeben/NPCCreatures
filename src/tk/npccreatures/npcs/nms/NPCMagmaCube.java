@@ -64,8 +64,8 @@ public class NPCMagmaCube extends EntityMagmaCube {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 

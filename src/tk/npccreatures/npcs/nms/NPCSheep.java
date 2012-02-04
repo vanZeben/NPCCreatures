@@ -60,7 +60,7 @@ public class NPCSheep extends EntitySheep {
 
 	// Stroll
 	@Override
-	public void C() {
+	public void D() {
 		return;
 	}
 
@@ -85,8 +85,8 @@ public class NPCSheep extends EntitySheep {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 

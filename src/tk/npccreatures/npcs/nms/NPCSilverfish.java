@@ -51,7 +51,7 @@ public class NPCSilverfish extends EntitySilverfish {
 
 	// Stroll
 	@Override
-	public void C() {
+	public void D() {
 		return;
 	}
 
@@ -76,24 +76,15 @@ public class NPCSilverfish extends EntitySilverfish {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 
 	// Damage?
 	@Override
 	protected void a(Entity entity, float f) {
-		if (this.attackTicks <= 0 && f < 1.2F && entity.boundingBox.e > this.boundingBox.b && entity.boundingBox.b < this.boundingBox.e) {
-			this.attackTicks = 20;
-			entity.damageEntity(DamageSource.mobAttack(this), this.damage);
-		}
-	}
-
-	// Targeting
-	@Override
-	public boolean g() {
-		return false;
+		return;
 	}
 
 }

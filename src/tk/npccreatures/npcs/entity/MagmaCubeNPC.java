@@ -5,7 +5,7 @@ import tk.npccreatures.npcs.nms.NPCMagmaCube;
 /**
  * Represents a MagmaCube NPC.
  */
-public class MagmaCubeNPC extends NPC {
+public class MagmaCubeNPC extends BaseNPC {
 
 	public MagmaCubeNPC(NPCMagmaCube entity, String name) {
 		super(entity, name);

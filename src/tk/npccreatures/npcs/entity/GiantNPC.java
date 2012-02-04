@@ -5,7 +5,7 @@ import tk.npccreatures.npcs.nms.NPCGiant;
 /**
  * Represents a Giant NPC.
  */
-public class GiantNPC extends NPC {
+public class GiantNPC extends BaseNPC {
 
 	public GiantNPC(NPCGiant entity, String name) {
 		super(entity, name);

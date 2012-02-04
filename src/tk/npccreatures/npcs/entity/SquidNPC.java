@@ -2,7 +2,7 @@ package tk.npccreatures.npcs.entity;
 
 import tk.npccreatures.npcs.nms.NPCSquid;
 
-public class SquidNPC extends NPC {
+public class SquidNPC extends BaseNPC {
 
 	/**
 	 * Represents a Squid NPC.

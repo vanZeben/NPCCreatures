@@ -65,8 +65,8 @@ public class NPCEnderDragon extends EntityEnderDragon {
 
 	// onUpdate
 	@Override
-	public void w_() {
-		super.w_();
+	public void am() {
+		super.am();
 		return;
 	}
 
@@ -96,7 +96,7 @@ public class NPCEnderDragon extends EntityEnderDragon {
 
 	// Explosions
 	@Override
-	protected void ag() {
+	protected void an() {
 		return;
 	}
 

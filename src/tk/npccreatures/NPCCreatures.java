@@ -18,11 +18,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.event.Event;
 import org.getspout.spoutapi.Spout;
 
 import tk.npccreatures.npcs.NPCManager;
 import tk.npccreatures.npcs.NPCType;
+import tk.npccreatures.npcs.entity.HumanNPC;
 import tk.npccreatures.npcs.entity.NPC;
 
 public class NPCCreatures extends JavaPlugin {
@@ -100,27 +100,28 @@ public class NPCCreatures extends JavaPlugin {
 			e.printStackTrace();
 		}
 		this.loadNPCs();
-		this.getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Normal, this);
-		this.getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, this);
+		this.getServer().getPluginManager().registerEvents(this.serverListener, this);
+		//this.getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Normal, this);
+		//this.getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Normal, this);
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new ResourceRunnable(this) {
 
 			@Override
 			public void run() {
 				NPCCreatures plugin = (NPCCreatures) params[0];
-				if (plugin.isSpoutEnabled) {
-					if (plugin.titleQueue.size() > 0) {
+				if (plugin.titleQueue.size() > 0) {
+					for (NPC npc : plugin.titleQueue) {
 						try {
-							for (NPC npc : plugin.titleQueue) {
-								if (npc.lastNameTime <= 0) {
-									Spout.getServer().setTitle(npc, ChatColor.GREEN + npc.getName());
-									plugin.titleQueue.remove(npc);
-								} else {
-									npc.lastNameTime--;
+							if (npc.getLastNameTime() <= 0) {
+								if(npc instanceof HumanNPC) {
+									npc.setName(npc.getNameColor() + npc.getName());
+								} else if (plugin.isSpoutEnabled) {
+									Spout.getServer().setTitle(npc, npc.getNameColor() + npc.getName());
 								}
+								plugin.titleQueue.remove(npc);
+							} else {
+								npc.setLastNameTime(npc.getLastNameTime() - 1);
 							}
-						} catch (ConcurrentModificationException cex) {
-
-						}
+						} catch(ConcurrentModificationException cme) { }
 					}
 				}
 			}

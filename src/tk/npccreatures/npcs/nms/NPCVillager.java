@@ -35,6 +35,13 @@ public class NPCVillager extends EntityVillager {
 	public void die() {
 		return;
 	}
+	
+	// onUpdate
+	@Override
+	public void am() {
+		super.am();
+		return;
+	}
 
 	// PathFinding
 	@Override
@@ -44,7 +51,7 @@ public class NPCVillager extends EntityVillager {
 
 	// Stroll
 	@Override
-	public void C() {
+	public void D() {
 		return;
 	}
 
@@ -64,13 +71,6 @@ public class NPCVillager extends EntityVillager {
 		} catch (ConcurrentModificationException ex) {
 		}
 
-		return;
-	}
-
-	// onUpdate
-	@Override
-	public void w_() {
-		super.w_();
 		return;
 	}
 
