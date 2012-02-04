@@ -159,12 +159,7 @@ public class HumanNPC extends org.bukkit.craftbukkit.entity.CraftPlayer implemen
 	public SpoutPlayer getSpoutPlayer() {
 		try {
 			Class.forName("org.getspout.spout.Spout");
-
-			if (!(getHandle().getBukkitEntity() instanceof SpoutCraftPlayer)) {
-				((NPCHuman) getHandle()).setBukkitEntity(new SpoutCraftPlayer((CraftServer) Bukkit.getServer(), (EntityPlayer) getHandle()));
-			}
-
-			return (SpoutPlayer) getHandle().getBukkitEntity();
+			return ((NPCHuman) getHandle()).getSpoutPlayer();
 		} catch (ClassNotFoundException e) {
 			Bukkit.getServer().getLogger().warning("Cannot get spout player without spout installed");
 		}
@@ -347,7 +342,7 @@ public class HumanNPC extends org.bukkit.craftbukkit.entity.CraftPlayer implemen
 	}
 
 	public void setPickupMode(boolean mode) {
-		this.pickupMode = true;
+		this.pickupMode = mode;
 	}
 
 	public boolean getPickupMode() {

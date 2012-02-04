@@ -218,7 +218,7 @@ public class BaseNPC extends org.bukkit.craftbukkit.entity.CraftLivingEntity imp
 	}
 
 	public void setPickupMode(boolean mode) {
-		this.pickupMode = true;
+		this.pickupMode = mode;
 	}
 
 	public boolean getPickupMode() {
