@@ -75,28 +75,6 @@ public class HumanNPC extends org.bukkit.craftbukkit.entity.CraftPlayer implemen
 	}
 
 	/**
-	 * Sets the item the NPC is holding.
-	 * 
-	 * @param The
-	 *            material for the NPC to hold.
-	 */
-	public void setItemInHand(Material m) {
-		setItemInHand(m, (short) 0);
-	}
-
-	/**
-	 * Sets the item the NPC is holding.
-	 * 
-	 * @param The
-	 *            material for the NPC to hold.
-	 * @param The
-	 *            data of the item to hold.
-	 */
-	public void setItemInHand(Material m, short damage) {
-		((HumanEntity) getHandle().getBukkitEntity()).setItemInHand(new ItemStack(m, 1, damage));
-	}
-
-	/**
 	 * Sets the name of the NPC.
 	 * 
 	 * @param The
@@ -110,17 +88,6 @@ public class HumanNPC extends org.bukkit.craftbukkit.entity.CraftPlayer implemen
 	@Override
 	public String getName() {
 		return ChatColor.stripColor(((NPCHuman) getHandle()).name);
-	}
-
-	/**
-	 * Sets the item the NPC is holding.
-	 * 
-	 * @param Gets
-	 *            the inventory of the NPC.
-	 * @return The inventory of the NPC.
-	 */
-	public PlayerInventory getInventory() {
-		return ((HumanEntity) getHandle().getBukkitEntity()).getInventory();
 	}
 
 	/**
@@ -173,10 +140,10 @@ public class HumanNPC extends org.bukkit.craftbukkit.entity.CraftPlayer implemen
 	 *            to look at.
 	 */
 	public void lookAtPoint(Location point) {
-		if (getHandle().getBukkitEntity().getWorld() != point.getWorld()) {
+		if (this.getWorld() != point.getWorld()) {
 			return;
 		}
-		Location npcLoc = ((LivingEntity) getHandle().getBukkitEntity()).getEyeLocation();
+		Location npcLoc = this.getEyeLocation();
 		double xDiff = point.getX() - npcLoc.getX();
 		double yDiff = point.getY() - npcLoc.getY();
 		double zDiff = point.getZ() - npcLoc.getZ();
@@ -215,7 +182,7 @@ public class HumanNPC extends org.bukkit.craftbukkit.entity.CraftPlayer implemen
 		if (path != null) {
 			path.cancel = true;
 		}
-		path = new NPCPathFinder(getHandle().getBukkitEntity().getLocation(), l, maxIterations, callback);
+		path = new NPCPathFinder(this.getLocation(), l, maxIterations, callback);
 		path.start();
 	}
 
