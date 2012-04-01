@@ -1,7 +1,8 @@
-# Eclipse stuff
-/.classpath
-/.project
-/.settings
-/bin
-/javadoc
-/Doxyfile
+.classpath
+.project
+.settings
+bin
+javadoc
+Doxyfile
+target
+.git
