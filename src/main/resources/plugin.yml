@@ -1,0 +1,14 @@
+name: NPCCreatures
+main: ch.spacebase.npccreatures.NPCCreatures
+version: 1.3_02
+
+commands:
+ createnpc:
+  description: Creates an NPC.
+  usage: /createnpc <name> [type]
+  permission: npccreatures.createnpc
+
+ deletenpc:
+  description: Deletes an NPC.
+  usage: /deletenpc <id>
+  permission: npccreatures.deletenpc
