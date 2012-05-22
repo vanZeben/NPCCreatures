@@ -33,19 +33,9 @@
 	<dependencies>
     		<dependency>
       			<groupId>org.bukkit</groupId>
-      			<artifactId>bukkit</artifactId>
-      			<version>1.2.4-R1.0</version>
-    		</dependency>
-    		<dependency>
-      			<groupId>org.bukkit</groupId>
       			<artifactId>craftbukkit</artifactId>
-      			<version>1.2.4-R1.0</version>
+      			<version>1.2.5-R1.3</version>
     		</dependency>
-		<dependency>
-			<groupId>org.getspout</groupId>
-			<artifactId>spoutpluginapi</artifactId>
-			<version>dev-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>org.getspout</groupId>
 			<artifactId>spoutplugin</artifactId>

@@ -27,6 +27,7 @@ import ch.spacebase.npccreatures.npcs.entity.NPC;
 
 public class NPCCreatures extends JavaPlugin {
 
+	public static final File config = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "config.yml");
 	public static Logger logger = Logger.getLogger("NPCCreatures");
 	
 	protected NPCManager npcManager;
@@ -38,10 +39,9 @@ public class NPCCreatures extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		try {
-			File npcCreaturesSave = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "config.yml");
-			if (!npcCreaturesSave.exists())
-				npcCreaturesSave.mkdir();
-			getConfig().save(npcCreaturesSave);
+			if (!config.exists())
+				config.mkdir();
+			getConfig().save(config);
 			npcManager.despawnAll();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -61,17 +61,16 @@ public class NPCCreatures extends JavaPlugin {
 			this.isSpoutEnabled = true;
 		}
 
-		File npcCreaturesSave = new File("plugins" + File.separator + "NPCCreatures" + File.separator + "config.yml");
-		if (!npcCreaturesSave.exists()) {
+		if (!config.exists()) {
 			try {
-				getConfig().save(npcCreaturesSave);
+				getConfig().save(config);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
 		try {
-			getConfig().load(npcCreaturesSave);
+			getConfig().load(config);
 			if (!getConfig().contains("pickup")) {
 				// Compatibility code for old configuration format
 				if (!getConfig().isConfigurationSection("npcs")) {
@@ -102,7 +101,7 @@ public class NPCCreatures extends JavaPlugin {
 				}
 
 				getConfig().set("pickup", false);
-				getConfig().save(npcCreaturesSave);
+				getConfig().save(config);
 			}
 
 			if (getConfig().getBoolean("pickup"))
@@ -200,6 +199,7 @@ public class NPCCreatures extends JavaPlugin {
 				}
 				NPC npc = this.npcManager.spawnNPC(name, ((Player) sender).getLocation(), type);
 				Hashtable<String, Object> data = new Hashtable<String, Object>();
+				
 				data.put("name", npc.getName());
 				data.put("type", type.toString());
 				data.put("x", ((Player) sender).getLocation().getX());
@@ -208,7 +208,16 @@ public class NPCCreatures extends JavaPlugin {
 				data.put("yaw", ((Player) sender).getLocation().getYaw());
 				data.put("pitch", ((Player) sender).getLocation().getPitch());
 				data.put("world", ((Player) sender).getLocation().getWorld().getName());
+				
 				getConfig().getConfigurationSection("npcs").createSection(npc.getNPCId(), data);
+				
+				try {
+					getConfig().save(config);
+				} catch (IOException e) {
+					logger.warning("Unable to save NPC to config when creating an NPC!");
+					e.printStackTrace();
+				}
+				
 				sender.sendMessage(ChatColor.GREEN + "Successfully created an npc with type " + type.toString() + "!");
 				return true;
 			}
@@ -217,8 +226,22 @@ public class NPCCreatures extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "Usage: /deletenpc <id>");
 					return true;
 				}
+				
+				if (this.npcManager.getNPC(args[0]) == null) {
+					sender.sendMessage(ChatColor.RED + "No NPC exists with the given ID.");
+					return true;
+				}
+				
 				this.npcManager.despawnById(args[0]);
 				getConfig().getConfigurationSection("npcs").set(args[0], null);
+				
+				try {
+					getConfig().save(config);
+				} catch (IOException e) {
+					logger.warning("Unable to save NPC to config when deleting an NPC!");
+					e.printStackTrace();
+				}
+				
 				sender.sendMessage(ChatColor.GREEN + "NPC successfully deleted!");
 			}
 		}

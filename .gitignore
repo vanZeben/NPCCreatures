@@ -2,6 +2,7 @@
 .project
 .settings
 bin
+lib
 javadoc
 Doxyfile
 target

@@ -144,11 +144,14 @@ public class HumanNPC extends org.bukkit.craftbukkit.entity.CraftPlayer implemen
 		double DistanceY = Math.sqrt(DistanceXZ * DistanceXZ + yDiff * yDiff);
 		double newYaw = (Math.acos(xDiff / DistanceXZ) * 180 / Math.PI);
 		double newPitch = (Math.acos(yDiff / DistanceY) * 180 / Math.PI) - 90;
+		
 		if (zDiff < 0.0) {
 			newYaw = newYaw + (Math.abs(180 - newYaw) * 2);
 		}
+		
 		getHandle().yaw = (float) (newYaw - 90);
 		getHandle().pitch = (float) newPitch;
+		getHandle().X = (float) (newYaw - 90);
 	}
 
 	public String getNPCId() {
@@ -231,7 +234,7 @@ public class HumanNPC extends org.bukkit.craftbukkit.entity.CraftPlayer implemen
 			if (last == null || runningPath.checkPath(n, last, true)) {
 				b = n.b;
 				if (last != null) {
-					angle = ((float) Math.toDegrees(Math.atan2(last.b.getX() - b.getX(), last.b.getZ() - b.getZ())));
+					angle = (float) Math.toDegrees(Math.atan2(last.b.getX() - n.b.getX(), n.b.getZ() - last.b.getZ()));
 					look = (float) (Math.toDegrees(Math.asin(last.b.getY() - b.getY())) / 2);
 				}
 				getHandle().setPositionRotation(b.getX() + 0.5, b.getY(), b.getZ() + 0.5, angle, look);
