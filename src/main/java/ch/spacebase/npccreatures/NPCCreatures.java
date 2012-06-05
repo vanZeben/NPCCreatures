@@ -112,44 +112,44 @@ public class NPCCreatures extends JavaPlugin {
 
 		this.loadNPCs();
 		this.getServer().getPluginManager().registerEvents(this.serverListener, this);
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new ResourceRunnable(this) {
-			@Override
-			public void run() {
-				NPCCreatures plugin = (NPCCreatures) params[0];
-				if (plugin.titleQueue.size() > 0) {
-					for (NPC npc : plugin.titleQueue) {
-						try {
-							if (npc.getLastNameTime() <= 0) {
-								if (npc instanceof HumanNPC) {
-									npc.setName(npc.getName());
-								} else if (plugin.isSpoutEnabled) {
-									Spout.getServer().setTitle(npc, (npc.getNameColor() != ChatColor.WHITE ? npc.getNameColor() : "") + npc.getName());
-								}
-								plugin.titleQueue.remove(npc);
-							} else {
-								npc.setLastNameTime(npc.getLastNameTime() - 1);
-							}
-						} catch (ConcurrentModificationException cme) {
-						}
-					}
-				}
-			}
-		}, 20, 20);
+//		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new ResourceRunnable(this) {
+//			@Override
+//			public void run() {
+//				NPCCreatures plugin = (NPCCreatures) params[0];
+//				if (plugin.titleQueue.size() > 0) {
+//					for (NPC npc : plugin.titleQueue) {
+//						try {
+//							if (npc.getLastNameTime() <= 0) {
+//								if (npc instanceof HumanNPC) {
+//									npc.setName(npc.getName());
+//								} else if (plugin.isSpoutEnabled) {
+//									Spout.getServer().setTitle(npc, (npc.getNameColor() != ChatColor.WHITE ? npc.getNameColor() : "") + npc.getName());
+//								}
+//								plugin.titleQueue.remove(npc);
+//							} else {
+//								npc.setLastNameTime(npc.getLastNameTime() - 1);
+//							}
+//						} catch (ConcurrentModificationException cme) {
+//						}
+//					}
+//				}
+//			}
+//		}, 20, 20);
 
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new ResourceRunnable(this) {
-			@Override
-			public void run() {
-				NPCCreatures plugin = (NPCCreatures) params[0];
-				for (NPC npc : plugin.npcManager.getNPCs()) {
-					for (org.bukkit.entity.Entity e : npc.getWorld().getEntities()) {
-						if (e instanceof Item) {
-							if (npc.getPickupMode() == true && npc.getLocation().distanceSquared(e.getLocation()) < npc.getItemPickupDistance())
-								npc.pickupItem((Item) e);
-						}
-					}
-				}
-			}
-		}, 10, 10);
+//		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new ResourceRunnable(this) {
+//			@Override
+//			public void run() {
+//				NPCCreatures plugin = (NPCCreatures) params[0];
+//				for (NPC npc : plugin.npcManager.getNPCs()) {
+//					for (org.bukkit.entity.Entity e : npc.getWorld().getEntities()) {
+//						if (e instanceof Item) {
+//							if (npc.getPickupMode() == true && npc.getLocation().distanceSquared(e.getLocation()) < npc.getItemPickupDistance())
+//								npc.pickupItem((Item) e);
+//						}
+//					}
+//				}
+//			}
+//		}, 10, 10);
 
 		this.getLogger().info(this.getDescription().getFullName() + " has been enabled!");
 	}
